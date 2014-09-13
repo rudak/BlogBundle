@@ -1,0 +1,15 @@
+{% extends 'RudakBlogBundle::layout.html.twig' %}
+
+{% block layout -%}
+    <h1>Post creation</h1>
+
+    {{ form(form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('admin_blog_post') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
+{% endblock %}

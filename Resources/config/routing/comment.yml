@@ -1,0 +1,30 @@
+admin_blog_comment:
+    path:     /
+    defaults: { _controller: "RudakBlogBundle:Comment:index" }
+
+admin_blog_comment_show:
+    path:     /{id}/show
+    defaults: { _controller: "RudakBlogBundle:Comment:show" }
+
+admin_blog_comment_new:
+    path:     /new
+    defaults: { _controller: "RudakBlogBundle:Comment:new" }
+
+admin_blog_comment_create:
+    path:     /create
+    defaults: { _controller: "RudakBlogBundle:Comment:create" }
+    requirements: { _method: post }
+
+admin_blog_comment_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "RudakBlogBundle:Comment:edit" }
+
+admin_blog_comment_update:
+    path:     /{id}/update
+    defaults: { _controller: "RudakBlogBundle:Comment:update" }
+    requirements: { _method: post|put }
+
+admin_blog_comment_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "RudakBlogBundle:Comment:delete" }
+    requirements: { _method: post|delete }
