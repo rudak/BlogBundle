@@ -1,16 +1,22 @@
-{% extends '::base.html.twig' %}
+{% extends 'RudakBlogBundle::layout.html.twig' %}
 
-{% block body -%}
-    <h1>Comment edit</h1>
+{% block layout -%}
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{ path('rcmAdminIndex') }}">Administration</a>
+        </li>
+        <li>
+            <a href="{{ path('admin_blog_comment') }}">
+                Commentaires
+            </a>
+        </li>
+        <li class="active">
+            Modifier le commentaire
+        </li>
+    </ol>
 
     {{ form(edit_form) }}
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('admin_blog_comment') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    {{ form(delete_form) }}
+
 {% endblock %}

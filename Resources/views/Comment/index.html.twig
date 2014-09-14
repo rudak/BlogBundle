@@ -1,45 +1,53 @@
-{% extends '::base.html.twig' %}
+{% extends 'RudakBlogBundle::layout.html.twig' %}
 
-{% block body -%}
-    <h1>Comment list</h1>
+{% block layout %}
 
-    <table class="records_list">
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{ path('rcmAdminIndex') }}">Administration</a>
+        </li>
+        <li class="active">
+            Commentaires
+        </li>
+    </ol>
+
+
+    <table class="table">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>Date</th>
-                <th>Content</th>
-                <th>Issignaled</th>
-                <th>Actions</th>
-            </tr>
+        <tr>
+            <th>Création</th>
+            <th></th>
+            <th>Actions</th>
+        </tr>
         </thead>
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('admin_blog_comment_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
-                <td>{% if entity.date %}{{ entity.date|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{{ entity.content }}</td>
-                <td>{{ entity.isSignaled }}</td>
+                <td>{% if entity.date %}{{ entity.date|date('d/m/Y \\à H:i:s') }}{% endif %}</td>
+                <td>{% if entity.isSignaled %}
+                        <span class="label label-danger">Signalé</span>
+                    {% endif %}
+                </td>
                 <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('admin_blog_comment_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('admin_blog_comment_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
+                    <ul>
+                        <li>
+                            <a href="{{ path('admin_blog_comment_show', { 'id': entity.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('admin_blog_comment_edit', { 'id': entity.id }) }}">edit</a>
+                        </li>
+                    </ul>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-        <ul>
+    <ul>
         <li>
             <a href="{{ path('admin_blog_comment_new') }}">
                 Create a new entry
             </a>
         </li>
     </ul>
-    {% endblock %}
+{% endblock %}

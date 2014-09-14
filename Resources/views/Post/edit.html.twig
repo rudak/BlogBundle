@@ -1,16 +1,21 @@
 {% extends 'RudakBlogBundle::layout.html.twig' %}
 
 {% block layout -%}
-    <h1>Post edit</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{ path('rcmAdminIndex') }}">Administration</a>
+        </li>
+        <li>
+            <a href="{{ path('admin_blog_post') }}">
+                Articles
+            </a>
+        </li>
+        <li class="active">
+            Modifier l'article
+        </li>
+    </ol>
 
     {{ form(edit_form) }}
+    {{ form(delete_form) }}
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('admin_blog_post') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
 {% endblock %}

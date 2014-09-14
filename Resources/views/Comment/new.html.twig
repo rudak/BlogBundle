@@ -1,15 +1,19 @@
-{% extends '::base.html.twig' %}
+{% extends 'RudakBlogBundle::layout.html.twig' %}
 
-{% block body -%}
-    <h1>Comment creation</h1>
+{% block layout %}
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{ path('rcmAdminIndex') }}">Administration</a>
+        </li>
+        <li>
+            <a href="{{ path('admin_blog_comment') }}">
+                Commentaires
+            </a>
+        </li>
+        <li class="active">
+            Creation du Commentaire
+        </li>
+    </ol>
 
     {{ form(form) }}
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('admin_blog_comment') }}">
-            Back to the list
-        </a>
-    </li>
-</ul>
 {% endblock %}

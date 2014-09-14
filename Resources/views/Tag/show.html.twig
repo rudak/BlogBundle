@@ -1,9 +1,21 @@
-{% extends '::base.html.twig' %}
+{% extends 'RudakBlogBundle::layout.html.twig' %}
 
-{% block body -%}
-    <h1>Tag</h1>
+{% block layout -%}
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{ path('rcmAdminIndex') }}">Administration</a>
+        </li>
+        <li>
+            <a href="{{ path('admin_blog_tag') }}">
+                Tags
+            </a>
+        </li>
+        <li class="active">
+            Voir le tag
+        </li>
+    </ol>
 
-    <table class="record_properties">
+    <table class="table">
         <tbody>
             <tr>
                 <th>Id</th>
@@ -16,17 +28,14 @@
         </tbody>
     </table>
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('admin_blog_tag') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
+
+
+    <p>
+
         <a href="{{ path('admin_blog_tag_edit', { 'id': entity.id }) }}">
             Edit
         </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    </p>
+    {{ form(delete_form) }}
+
 {% endblock %}

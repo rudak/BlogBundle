@@ -1,9 +1,21 @@
 {% extends 'RudakBlogBundle::layout.html.twig' %}
 
 {% block layout -%}
-    <h1>Post</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{ path('rcmAdminIndex') }}">Administration</a>
+        </li>
+        <li>
+            <a href="{{ path('admin_blog_post') }}">
+                Articles
+            </a>
+        </li>
+        <li class="active">
+            Voir l'article
+        </li>
+    </ol>
 
-    <table class="record_properties">
+    <table class="table">
         <tbody>
             <tr>
                 <th>Id</th>
@@ -23,15 +35,21 @@
             </tr>
             <tr>
                 <th>Date</th>
-                <td>{{ entity.date|date('Y-m-d H:i:s') }}</td>
+                <td>{{ entity.date|date('d/m/Y \\à H:i') }}</td>
             </tr>
             <tr>
                 <th>Ispublic</th>
-                <td>{{ entity.isPublic }}</td>
+                <td>
+                    {% if entity.isPublic %}
+                        <span class="label label-success">Visible</span>
+                    {% else %}
+                        <span class="label label-danger">Masqué</span>
+                    {% endif %}
+                </td>
             </tr>
             <tr>
                 <th>Publishdate</th>
-                <td>{{ entity.publishDate|date('Y-m-d H:i:s') }}</td>
+                <td>{{ entity.publishDate|date('d/m/Y') }}</td>
             </tr>
         </tbody>
     </table>

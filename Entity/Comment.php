@@ -55,7 +55,7 @@ class Comment
     /**
      * @var boolean
      *
-     * @ORM\Column(name="isSignaled", type="boolean")
+     * @ORM\Column(name="isSignaled", type="boolean",nullable=true)
      */
     private $isSignaled;
 

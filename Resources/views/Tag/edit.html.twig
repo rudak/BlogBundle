@@ -1,16 +1,23 @@
-{% extends '::base.html.twig' %}
+{% extends 'RudakBlogBundle::layout.html.twig' %}
 
-{% block body -%}
-    <h1>Tag edit</h1>
+{% block layout -%}
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{ path('rcmAdminIndex') }}">Administration</a>
+        </li>
+        <li>
+            <a href="{{ path('admin_blog_tag') }}">
+                Tags
+            </a>
+        </li>
+        <li class="active">
+            Modifier le tag
+        </li>
+    </ol>
 
     {{ form(edit_form) }}
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('admin_blog_tag') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+
+    {{ form(delete_form) }}
+
 {% endblock %}

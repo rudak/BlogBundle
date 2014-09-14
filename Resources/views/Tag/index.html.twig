@@ -1,9 +1,16 @@
-{% extends '::base.html.twig' %}
+{% extends 'RudakBlogBundle::layout.html.twig' %}
 
-{% block body -%}
-    <h1>Tag list</h1>
+{% block layout %}
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{ path('rcmAdminIndex') }}">Administration</a>
+        </li>
+        <li class="active">
+            Tags
+        </li>
+    </ol>
 
-    <table class="records_list">
+    <table class="table table-condensed table-bordered">
         <thead>
             <tr>
                 <th>Id</th>

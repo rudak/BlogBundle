@@ -52,7 +52,7 @@ class Post
     /**
      * @var boolean
      *
-     * @ORM\Column(name="isPublic", type="boolean")
+     * @ORM\Column(name="isPublic", type="boolean",nullable=true)
      */
     private $isPublic;
 
@@ -79,12 +79,16 @@ class Post
     private $tags;
 
     /**
-     * @var \DateTime
+     * @var \Date
      *
-     * @ORM\Column(name="publishDate", type="datetime")
+     * @ORM\Column(name="publishDate", type="date")
      */
     private $publishDate;
 
+    public function __toString()
+    {
+        return $this->title;
+    }
 
     /**
      * Constructor
@@ -92,13 +96,13 @@ class Post
     public function __construct()
     {
         $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tags     = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -121,7 +125,7 @@ class Post
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -144,7 +148,7 @@ class Post
     /**
      * Get slug
      *
-     * @return string 
+     * @return string
      */
     public function getSlug()
     {
@@ -167,7 +171,7 @@ class Post
     /**
      * Get content
      *
-     * @return string 
+     * @return string
      */
     public function getContent()
     {
@@ -190,7 +194,7 @@ class Post
     /**
      * Get date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -213,7 +217,7 @@ class Post
     /**
      * Get isPublic
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsPublic()
     {
@@ -236,7 +240,7 @@ class Post
     /**
      * Get publishDate
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getPublishDate()
     {
@@ -269,7 +273,7 @@ class Post
     /**
      * Get comments
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getComments()
     {
@@ -292,7 +296,7 @@ class Post
     /**
      * Get category
      *
-     * @return \Rudak\BlogBundle\Entity\Category 
+     * @return \Rudak\BlogBundle\Entity\Category
      */
     public function getCategory()
     {
@@ -325,7 +329,7 @@ class Post
     /**
      * Get tags
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getTags()
     {
