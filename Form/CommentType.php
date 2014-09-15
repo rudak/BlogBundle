@@ -22,8 +22,9 @@ class CommentType extends AbstractType
                 ))
             */
             ->add('content')
-            ->add('isSignaled','checkbox',array(
-                'label' => 'Signalé'
+            ->add('isSignaled', 'checkbox', array(
+                'label'    => 'Signalé',
+                'required' => false
             ))
             ->add('post')
             ->add('creator');
