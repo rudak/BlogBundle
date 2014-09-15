@@ -29,6 +29,7 @@ class PostController extends Controller
             'entities' => $entities,
         ));
     }
+
     /**
      * Creates a new Post entity.
      *
@@ -36,7 +37,7 @@ class PostController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Post();
-        $form = $this->createCreateForm($entity);
+        $form   = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -67,7 +68,12 @@ class PostController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array(
+            'label' => 'Créer cet article',
+            'attr'  => array(
+                'class' => 'btn btn-success'
+            )
+        ));
 
         return $form;
     }
@@ -123,7 +129,7 @@ class PostController extends Controller
             throw $this->createNotFoundException('Unable to find Post entity.');
         }
 
-        $editForm = $this->createEditForm($entity);
+        $editForm   = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('RudakBlogBundle:Post:edit.html.twig', array(
@@ -134,12 +140,12 @@ class PostController extends Controller
     }
 
     /**
-    * Creates a form to edit a Post entity.
-    *
-    * @param Post $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to edit a Post entity.
+     *
+     * @param Post $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
     private function createEditForm(Post $entity)
     {
         $form = $this->createForm(new PostType(), $entity, array(
@@ -147,10 +153,14 @@ class PostController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Modifier',
+                                             'attr'  => array(
+                                                 'class' => 'btn btn-success'
+                                             )));
 
         return $form;
     }
+
     /**
      * Edits an existing Post entity.
      *
@@ -166,7 +176,7 @@ class PostController extends Controller
         }
 
         $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createEditForm($entity);
+        $editForm   = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
@@ -181,6 +191,7 @@ class PostController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
+
     /**
      * Deletes a Post entity.
      *
@@ -191,7 +202,7 @@ class PostController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em     = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('RudakBlogBundle:Post')->find($id);
 
             if (!$entity) {
@@ -217,8 +228,10 @@ class PostController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('admin_blog_post_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
+            ->add('submit', 'submit', array('label' => 'Supprimer',
+                                            'attr'  => array(
+                                                'class' => 'btn btn-danger'
+                                            )))
+            ->getForm();
     }
 }

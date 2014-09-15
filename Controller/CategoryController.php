@@ -29,6 +29,7 @@ class CategoryController extends Controller
             'entities' => $entities,
         ));
     }
+
     /**
      * Creates a new Category entity.
      *
@@ -36,7 +37,7 @@ class CategoryController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Category();
-        $form = $this->createCreateForm($entity);
+        $form   = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -67,7 +68,10 @@ class CategoryController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => 'Créer cette catégorie',
+                                             'attr'  => array(
+                                                 'class' => 'btn btn-success'
+                                             )));
 
         return $form;
     }
@@ -123,7 +127,7 @@ class CategoryController extends Controller
             throw $this->createNotFoundException('Unable to find Category entity.');
         }
 
-        $editForm = $this->createEditForm($entity);
+        $editForm   = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('RudakBlogBundle:Category:edit.html.twig', array(
@@ -134,12 +138,12 @@ class CategoryController extends Controller
     }
 
     /**
-    * Creates a form to edit a Category entity.
-    *
-    * @param Category $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to edit a Category entity.
+     *
+     * @param Category $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
     private function createEditForm(Category $entity)
     {
         $form = $this->createForm(new CategoryType(), $entity, array(
@@ -147,10 +151,14 @@ class CategoryController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Modifier',
+                                             'attr'  => array(
+                                                 'class' => 'btn btn-success'
+                                             )));
 
         return $form;
     }
+
     /**
      * Edits an existing Category entity.
      *
@@ -166,7 +174,7 @@ class CategoryController extends Controller
         }
 
         $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createEditForm($entity);
+        $editForm   = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
@@ -181,6 +189,7 @@ class CategoryController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
+
     /**
      * Deletes a Category entity.
      *
@@ -191,7 +200,7 @@ class CategoryController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em     = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('RudakBlogBundle:Category')->find($id);
 
             if (!$entity) {
@@ -217,8 +226,13 @@ class CategoryController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('admin_blog_category_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
+            ->add('submit', 'submit',
+                array(
+                    'label' => 'Supprimer',
+                    'attr'  => array(
+                        'class' => 'btn btn-danger'
+                    )
+                ))
+            ->getForm();
     }
 }

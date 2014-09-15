@@ -15,39 +15,41 @@
     <table class="table">
         <thead>
         <tr>
+            <th>Créateur</th>
             <th>Création</th>
             <th></th>
-            <th>Actions</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
         {% for entity in entities %}
             <tr>
+                <td>
+                    {{ entity.creator }}
+                </td>
                 <td>{% if entity.date %}{{ entity.date|date('d/m/Y \\à H:i:s') }}{% endif %}</td>
                 <td>{% if entity.isSignaled %}
                         <span class="label label-danger">Signalé</span>
                     {% endif %}
                 </td>
                 <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('admin_blog_comment_show', { 'id': entity.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('admin_blog_comment_edit', { 'id': entity.id }) }}">edit</a>
-                        </li>
-                    </ul>
+                    <a href="{{ path('admin_blog_comment_show', { 'id': entity.id }) }}" class="btn btn-xs btn-default">
+                        Voir
+                    </a>
+
+                    <a href="{{ path('admin_blog_comment_edit', { 'id': entity.id }) }}" class="btn btn-xs btn-default">
+                        Modifier
+                    </a>
+
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <ul>
-        <li>
-            <a href="{{ path('admin_blog_comment_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
+    <p>
+        <a href="{{ path('admin_blog_comment_new') }}" class="btn btn-primary">
+            Ajouter un commentaire
+        </a>
+    </p>
 {% endblock %}

@@ -29,6 +29,7 @@ class TagController extends Controller
             'entities' => $entities,
         ));
     }
+
     /**
      * Creates a new Tag entity.
      *
@@ -36,7 +37,7 @@ class TagController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Tag();
-        $form = $this->createCreateForm($entity);
+        $form   = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -67,7 +68,10 @@ class TagController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => 'Créer',
+                                             'attr'  => array(
+                                                 'class' => 'btn btn-success'
+                                             )));
 
         return $form;
     }
@@ -123,7 +127,7 @@ class TagController extends Controller
             throw $this->createNotFoundException('Unable to find Tag entity.');
         }
 
-        $editForm = $this->createEditForm($entity);
+        $editForm   = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('RudakBlogBundle:Tag:edit.html.twig', array(
@@ -134,12 +138,12 @@ class TagController extends Controller
     }
 
     /**
-    * Creates a form to edit a Tag entity.
-    *
-    * @param Tag $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to edit a Tag entity.
+     *
+     * @param Tag $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
     private function createEditForm(Tag $entity)
     {
         $form = $this->createForm(new TagType(), $entity, array(
@@ -147,10 +151,14 @@ class TagController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Modifier',
+                                             'attr'  => array(
+                                                 'class' => 'btn btn-success'
+                                             )));
 
         return $form;
     }
+
     /**
      * Edits an existing Tag entity.
      *
@@ -166,7 +174,7 @@ class TagController extends Controller
         }
 
         $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createEditForm($entity);
+        $editForm   = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
@@ -181,6 +189,7 @@ class TagController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
+
     /**
      * Deletes a Tag entity.
      *
@@ -191,7 +200,7 @@ class TagController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em     = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('RudakBlogBundle:Tag')->find($id);
 
             if (!$entity) {
@@ -217,8 +226,10 @@ class TagController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('admin_blog_tag_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
+            ->add('submit', 'submit', array('label' => 'Supprimer',
+                                            'attr'  => array(
+                                                'class' => 'btn btn-danger'
+                                            )))
+            ->getForm();
     }
 }

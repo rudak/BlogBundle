@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Comment
  *
  * @ORM\Table(name="blog_comments")
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Entity(repositoryClass="Rudak\BlogBundle\Entity\CommentRepository")
  */
 class Comment
@@ -63,7 +64,7 @@ class Comment
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -86,7 +87,7 @@ class Comment
     /**
      * Get date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -109,7 +110,7 @@ class Comment
     /**
      * Get content
      *
-     * @return string 
+     * @return string
      */
     public function getContent()
     {
@@ -133,7 +134,7 @@ class Comment
     /**
      * Get post
      *
-     * @return \Rudak\BlogBundle\Entity\Post 
+     * @return \Rudak\BlogBundle\Entity\Post
      */
     public function getPost()
     {
@@ -156,7 +157,7 @@ class Comment
     /**
      * Get creator
      *
-     * @return \Rcm\UserBundle\Entity\User 
+     * @return \Rcm\UserBundle\Entity\User
      */
     public function getCreator()
     {
@@ -179,10 +180,18 @@ class Comment
     /**
      * Get isSignaled
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getIsSignaled()
     {
         return $this->isSignaled;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     */
+    public function updateDate()
+    {
+        $this->date = new \Datetime();
     }
 }

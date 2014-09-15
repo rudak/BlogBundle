@@ -29,6 +29,7 @@ class CommentController extends Controller
             'entities' => $entities,
         ));
     }
+
     /**
      * Creates a new Comment entity.
      *
@@ -36,7 +37,7 @@ class CommentController extends Controller
     public function createAction(Request $request)
     {
         $entity = new Comment();
-        $form = $this->createCreateForm($entity);
+        $form   = $this->createCreateForm($entity);
         $form->handleRequest($request);
 
         if ($form->isValid()) {
@@ -67,7 +68,10 @@ class CommentController extends Controller
             'method' => 'POST',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Create'));
+        $form->add('submit', 'submit', array('label' => 'Créer ce commentaire',
+                                             'attr'  => array(
+                                                 'class' => 'btn btn-success'
+                                             ),));
 
         return $form;
     }
@@ -123,7 +127,7 @@ class CommentController extends Controller
             throw $this->createNotFoundException('Unable to find Comment entity.');
         }
 
-        $editForm = $this->createEditForm($entity);
+        $editForm   = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return $this->render('RudakBlogBundle:Comment:edit.html.twig', array(
@@ -134,12 +138,12 @@ class CommentController extends Controller
     }
 
     /**
-    * Creates a form to edit a Comment entity.
-    *
-    * @param Comment $entity The entity
-    *
-    * @return \Symfony\Component\Form\Form The form
-    */
+     * Creates a form to edit a Comment entity.
+     *
+     * @param Comment $entity The entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
     private function createEditForm(Comment $entity)
     {
         $form = $this->createForm(new CommentType(), $entity, array(
@@ -147,10 +151,14 @@ class CommentController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array('label' => 'Modifier',
+                                             'attr'  => array(
+                                                 'class' => 'btn btn-success'
+                                             )));
 
         return $form;
     }
+
     /**
      * Edits an existing Comment entity.
      *
@@ -166,7 +174,7 @@ class CommentController extends Controller
         }
 
         $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createEditForm($entity);
+        $editForm   = $this->createEditForm($entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isValid()) {
@@ -181,6 +189,7 @@ class CommentController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
+
     /**
      * Deletes a Comment entity.
      *
@@ -191,7 +200,7 @@ class CommentController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
+            $em     = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('RudakBlogBundle:Comment')->find($id);
 
             if (!$entity) {
@@ -217,8 +226,10 @@ class CommentController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('admin_blog_comment_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
-            ->getForm()
-        ;
+            ->add('submit', 'submit', array('label' => 'Supprimer',
+                                            'attr'  => array(
+                                                'class' => 'btn btn-danger'
+                                            )))
+            ->getForm();
     }
 }

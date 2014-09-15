@@ -10,39 +10,33 @@
         </li>
     </ol>
 
-    <table class="table table-condensed table-bordered">
+    <table class="table table-condensed">
         <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Actions</th>
-            </tr>
+        <tr>
+            <th>Nom</th>
+            <th></th>
+        </tr>
         </thead>
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td><a href="{{ path('admin_blog_tag_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
                 <td>{{ entity.name }}</td>
                 <td>
-                <ul>
-                    <li>
-                        <a href="{{ path('admin_blog_tag_show', { 'id': entity.id }) }}">show</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('admin_blog_tag_edit', { 'id': entity.id }) }}">edit</a>
-                    </li>
-                </ul>
+                    <a href="{{ path('admin_blog_tag_show', { 'id': entity.id }) }}" class="btn btn-xs btn-default">
+                        Voir
+                    </a>
+                    <a href="{{ path('admin_blog_tag_edit', { 'id': entity.id }) }}" class="btn btn-xs btn-default">
+                        Modifier
+                    </a>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-        <ul>
-        <li>
-            <a href="{{ path('admin_blog_tag_new') }}">
-                Create a new entry
-            </a>
-        </li>
-    </ul>
-    {% endblock %}
+    <p>
+        <a href="{{ path('admin_blog_tag_new') }}" class="btn btn-primary">
+            Ajouter un tag
+        </a>
+    </p>
+{% endblock %}

@@ -8,21 +8,27 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class CommentType extends AbstractType
 {
-        /**
+    /**
      * @param FormBuilderInterface $builder
      * @param array $options
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('date')
+            /*
+                ->add('date', 'datetime', array(
+                    'widget' => 'single_text',
+                    'format' => 'dd/MM/yyyy',
+                ))
+            */
             ->add('content')
-            ->add('isSignaled')
+            ->add('isSignaled','checkbox',array(
+                'label' => 'Signalé'
+            ))
             ->add('post')
-            ->add('creator')
-        ;
+            ->add('creator');
     }
-    
+
     /**
      * @param OptionsResolverInterface $resolver
      */

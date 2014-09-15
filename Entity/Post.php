@@ -3,11 +3,13 @@
 namespace Rudak\BlogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Rudak\BlogBundle\Utils\Slug;
 
 /**
  * Post
  *
  * @ORM\Table(name="blog_post")
+ * @ORM\HasLifecycleCallbacks
  * @ORM\Entity(repositoryClass="Rudak\BlogBundle\Entity\PostRepository")
  */
 class Post
@@ -95,8 +97,9 @@ class Post
      */
     public function __construct()
     {
-        $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->tags     = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->publishDate = $this->date = new \DateTime();
+        $this->comments    = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tags        = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -334,5 +337,24 @@ class Post
     public function getTags()
     {
         return $this->tags;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function slugTheTile()
+    {
+        $Slug = new Slug();
+        $Slug->setString($this->title);
+        $this->slug = $Slug->getSlug();
+    }
+
+    /**
+     * @ORM\PrePersist()
+     */
+    public function updateDate()
+    {
+        $this->date = new \Datetime();
     }
 }
