@@ -41,8 +41,6 @@ class Slug
      */
     private function slugTheString()
     {
-
-
         // remplacer ce qui n'est pas une letre par un tiret
         $text = preg_replace('~[^\\pL\d]+~u', '-', $this->string);
         // virer les accents
@@ -53,11 +51,9 @@ class Slug
         $text = iconv('utf-8', 'us-ascii//TRANSLIT', $text);
         // lowercase
         $text = strtolower($text);
-        // remove unwanted characters
-        $text = preg_replace('~[^-\w]+~', '', $text);
-
-
-        $this->slug = $text;
+        // remove unwanted characters ...and hydrat slug
+        $this->slug = preg_replace('~[^-\w]+~', '', $text);
+        $text       = null;
     }
 
     /**
