@@ -1,56 +1,55 @@
-{% extends 'RudakBlogBundle::layout.html.twig' %}
+{% extends '::base.html.twig' %}
 
-{% block layout %}
+{% block body -%}
+    <h1>Post list</h1>
 
-    <ol class="breadcrumb">
-        <li>
-            <a href="{{ path('rcmAdminIndex') }}">Administration</a>
-        </li>
-        <li class="active">
-            Articles
-        </li>
-    </ol>
-
-
-    <table class="table">
+    <table class="records_list">
         <thead>
-        <tr>
-            <th>Titre</th>
-            <th>Article créé le</th>
-            <th></th>
-            <th>Date de publication</th>
-            <th></th>
-        </tr>
+            <tr>
+                <th>Id</th>
+                <th>Createdate</th>
+                <th>Lasteditdate</th>
+                <th>Title</th>
+                <th>Slug</th>
+                <th>Content</th>
+                <th>Creator</th>
+                <th>Public</th>
+                <th>Hit</th>
+                <th>Actions</th>
+            </tr>
         </thead>
         <tbody>
         {% for entity in entities %}
             <tr>
+                <td><a href="{{ path('admin_blog_post_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+                <td>{% if entity.createDate %}{{ entity.createDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if entity.lastEditDate %}{{ entity.lastEditDate|date('Y-m-d H:i:s') }}{% endif %}</td>
                 <td>{{ entity.title }}</td>
-                <td>{% if entity.date %}{{ entity.date|date('d/m/Y \\à H:i') }}{% endif %}</td>
+                <td>{{ entity.slug }}</td>
+                <td>{{ entity.content }}</td>
+                <td>{{ entity.creator }}</td>
+                <td>{{ entity.public }}</td>
+                <td>{{ entity.hit }}</td>
                 <td>
-                    {% if entity.isPublic %}
-                        <span class="label label-success">Visible</span>
-                    {% else %}
-                        <span class="label label-danger">Masqué</span>
-                    {% endif %}
-                </td>
-                <td>{% if entity.publishDate %}{{ entity.publishDate|date('d/m/Y') }}{% endif %}</td>
-                <td>
-                    <a href="{{ path('admin_blog_post_show', { 'id': entity.id }) }}" class="btn btn-xs btn-default">
-                        Voir
-                    </a>
-                    <a href="{{ path('admin_blog_post_edit', { 'id': entity.id }) }}" class="btn btn-xs btn-default">
-                        Modifier
-                    </a>
+                <ul>
+                    <li>
+                        <a href="{{ path('admin_blog_post_show', { 'id': entity.id }) }}">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('admin_blog_post_edit', { 'id': entity.id }) }}">edit</a>
+                    </li>
+                </ul>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <p>
-        <a href="{{ path('admin_blog_post_new') }}" class="btn btn-primary">
-            Ajouter un article
-        </a>
-    </p>
-{% endblock %}
+        <ul>
+        <li>
+            <a href="{{ path('admin_blog_post_new') }}">
+                Create a new entry
+            </a>
+        </li>
+    </ul>
+    {% endblock %}

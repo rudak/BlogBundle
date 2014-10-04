@@ -1,0 +1,3 @@
+rudak_blog_admin_post:
+    resource: "@RudakBlogBundle/Resources/config/routing/post.yml"
+    prefix:   /admin/blog/post

@@ -1,19 +1,15 @@
-{% extends 'RudakBlogBundle::layout.html.twig' %}
+{% extends '::base.html.twig' %}
 
-{% block layout %}
-    <ol class="breadcrumb">
-        <li>
-            <a href="{{ path('rcmAdminIndex') }}">Administration</a>
-        </li>
-        <li>
-            <a href="{{ path('admin_blog_post') }}">
-                Articles
-            </a>
-        </li>
-        <li class="active">
-            Creation de l'article
-        </li>
-    </ol>
+{% block body -%}
+    <h1>Post creation</h1>
 
     {{ form(form) }}
+
+        <ul class="record_actions">
+    <li>
+        <a href="{{ path('admin_blog_post') }}">
+            Back to the list
+        </a>
+    </li>
+</ul>
 {% endblock %}

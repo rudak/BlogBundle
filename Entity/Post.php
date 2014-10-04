@@ -3,13 +3,11 @@
 namespace Rudak\BlogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Rudak\BlogBundle\Utils\Slug;
 
 /**
  * Post
  *
- * @ORM\Table(name="blog_post")
- * @ORM\HasLifecycleCallbacks
+ * @ORM\Table(name="rudakBlog_post")
  * @ORM\Entity(repositoryClass="Rudak\BlogBundle\Entity\PostRepository")
  */
 class Post
@@ -24,16 +22,30 @@ class Post
     private $id;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="createDate", type="datetime")
+     */
+    private $createDate;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="lastEditDate", type="datetime")
+     */
+    private $lastEditDate;
+
+    /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=150)
+     * @ORM\Column(name="title", type="string", length=120)
      */
     private $title;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="slug", type="string", length=255)
+     * @ORM\Column(name="slug", type="string", length=125)
      */
     private $slug;
 
@@ -45,62 +57,31 @@ class Post
     private $content;
 
     /**
-     * @var \Date
+     * @var \stdClass
      *
-     * @ORM\Column(name="date", type="datetime")
+     * @ORM\Column(name="creator", type="object")
      */
-    private $date;
+    private $creator;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="isPublic", type="boolean",nullable=true)
+     * @ORM\Column(name="public", type="boolean")
      */
-    private $isPublic;
+    private $public;
 
     /**
-     * @var \stdClass
+     * @var integer
      *
-     * @ORM\OneToMany(
-     * targetEntity="Comment",
-     * mappedBy="post"
-     * )
+     * @ORM\Column(name="hit", type="integer")
      */
-    private $comments;
+    private $hit;
 
-    /**
-     *
-     * @ORM\ManyToOne(targetEntity="Category")
-     */
-    private $category;
-
-    /**
-     *
-     * @ORM\ManyToMany(targetEntity="Tag")
-     */
-    private $tags;
-
-    /**
-     * @var \Date
-     *
-     * @ORM\Column(name="publishDate", type="date")
-     */
-    private $publishDate;
-
-    public function __toString()
-    {
-        return $this->title;
-    }
-
-    /**
-     * Constructor
-     */
     public function __construct()
     {
-        $this->publishDate = $this->date = new \DateTime();
-        $this->comments    = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->tags        = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->hit = 0;
     }
+
 
     /**
      * Get id
@@ -110,6 +91,52 @@ class Post
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Set createDate
+     *
+     * @param \DateTime $createDate
+     * @return Post
+     */
+    public function setCreateDate($createDate)
+    {
+        $this->createDate = $createDate;
+
+        return $this;
+    }
+
+    /**
+     * Get createDate
+     *
+     * @return \DateTime
+     */
+    public function getCreateDate()
+    {
+        return $this->createDate;
+    }
+
+    /**
+     * Set lastEditDate
+     *
+     * @param \DateTime $lastEditDate
+     * @return Post
+     */
+    public function setLastEditDate($lastEditDate)
+    {
+        $this->lastEditDate = $lastEditDate;
+
+        return $this;
+    }
+
+    /**
+     * Get lastEditDate
+     *
+     * @return \DateTime
+     */
+    public function getLastEditDate()
+    {
+        return $this->lastEditDate;
     }
 
     /**
@@ -182,179 +209,71 @@ class Post
     }
 
     /**
-     * Set date
+     * Set creator
      *
-     * @param \DateTime $date
+     * @param \stdClass $creator
      * @return Post
      */
-    public function setDate($date)
+    public function setCreator($creator)
     {
-        $this->date = $date;
+        $this->creator = $creator;
 
         return $this;
     }
 
     /**
-     * Get date
+     * Get creator
      *
-     * @return \DateTime
+     * @return \stdClass
      */
-    public function getDate()
+    public function getCreator()
     {
-        return $this->date;
+        return $this->creator;
     }
 
     /**
-     * Set isPublic
+     * Set public
      *
-     * @param boolean $isPublic
+     * @param boolean $public
      * @return Post
      */
-    public function setIsPublic($isPublic)
+    public function setPublic($public)
     {
-        $this->isPublic = $isPublic;
+        $this->public = $public;
 
         return $this;
     }
 
     /**
-     * Get isPublic
+     * Get public
      *
      * @return boolean
      */
-    public function getIsPublic()
+    public function getPublic()
     {
-        return $this->isPublic;
+        return $this->public;
     }
 
     /**
-     * Set publishDate
+     * Set hit
      *
-     * @param \DateTime $publishDate
+     * @param integer $hit
      * @return Post
      */
-    public function setPublishDate($publishDate)
+    public function setHit($hit)
     {
-        $this->publishDate = $publishDate;
+        $this->hit = $hit;
 
         return $this;
     }
 
     /**
-     * Get publishDate
+     * Get hit
      *
-     * @return \DateTime
+     * @return integer
      */
-    public function getPublishDate()
+    public function getHit()
     {
-        return $this->publishDate;
-    }
-
-    /**
-     * Add comments
-     *
-     * @param \Rudak\BlogBundle\Entity\Comment $comments
-     * @return Post
-     */
-    public function addComment(\Rudak\BlogBundle\Entity\Comment $comments)
-    {
-        $this->comments[] = $comments;
-
-        return $this;
-    }
-
-    /**
-     * Remove comments
-     *
-     * @param \Rudak\BlogBundle\Entity\Comment $comments
-     */
-    public function removeComment(\Rudak\BlogBundle\Entity\Comment $comments)
-    {
-        $this->comments->removeElement($comments);
-    }
-
-    /**
-     * Get comments
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getComments()
-    {
-        return $this->comments;
-    }
-
-    /**
-     * Set category
-     *
-     * @param \Rudak\BlogBundle\Entity\Category $category
-     * @return Post
-     */
-    public function setCategory(\Rudak\BlogBundle\Entity\Category $category = null)
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    /**
-     * Get category
-     *
-     * @return \Rudak\BlogBundle\Entity\Category
-     */
-    public function getCategory()
-    {
-        return $this->category;
-    }
-
-    /**
-     * Add tags
-     *
-     * @param \Rudak\BlogBundle\Entity\Tag $tags
-     * @return Post
-     */
-    public function addTag(\Rudak\BlogBundle\Entity\Tag $tags)
-    {
-        $this->tags[] = $tags;
-
-        return $this;
-    }
-
-    /**
-     * Remove tags
-     *
-     * @param \Rudak\BlogBundle\Entity\Tag $tags
-     */
-    public function removeTag(\Rudak\BlogBundle\Entity\Tag $tags)
-    {
-        $this->tags->removeElement($tags);
-    }
-
-    /**
-     * Get tags
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTags()
-    {
-        return $this->tags;
-    }
-
-    /**
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
-     */
-    public function slugTheTile()
-    {
-        $Slug = new Slug();
-        $Slug->setString($this->title);
-        $this->slug = $Slug->getSlug();
-    }
-
-    /**
-     * @ORM\PrePersist()
-     */
-    public function updateDate()
-    {
-        $this->date = new \Datetime();
+        return $this->hit;
     }
 }

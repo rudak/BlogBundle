@@ -15,32 +15,17 @@ class PostType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('category', 'entity', array(
-                'class'    => 'RudakBlogBundle:Category',
-                'property' => 'name',
-                'required' => true,
-                'label'    => 'Catégorie'
-            ))
-            ->add('title', 'text', array(
-                'label' => 'Titre'
-            ))
-            //->add('slug')
-            ->add('content', 'textarea', array(
-                'label' => 'Contenu'
-            ))
-
-            ->add('isPublic', 'checkbox', array(
-                'required' => false,
-                'label'    => 'Publication'
-            ))
-            ->add('publishDate', 'datetime', array(
-                'widget' => 'single_text',
-                'format' => 'dd/MM/yyyy',
-                'label'  => 'Date de publication'
-            ));
-
+            ->add('createDate')
+            ->add('lastEditDate')
+            ->add('title')
+            ->add('slug')
+            ->add('content')
+            ->add('creator')
+            ->add('public')
+            ->add('hit')
+        ;
     }
-
+    
     /**
      * @param OptionsResolverInterface $resolver
      */
