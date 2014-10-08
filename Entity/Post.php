@@ -3,149 +3,88 @@
 namespace Rudak\BlogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Rudak\BlogBundle\Utils\Slug;
 
 /**
  * Post
  *
- * @ORM\Table(name="rudakBlog_post")
- * @ORM\Entity(repositoryClass="Rudak\BlogBundle\Entity\PostRepository")
+ * @ORM\Table()
+ * @ORM\MappedSuperclass
  */
-class Post
+abstract class Post
 {
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(name="title", type="string", length=150)
      */
-    private $id;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="createDate", type="datetime")
-     */
-    private $createDate;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="lastEditDate", type="datetime")
-     */
-    private $lastEditDate;
+    protected $title;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=120)
+     * @ORM\Column(name="slug", type="string", length=155)
      */
-    private $title;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="slug", type="string", length=125)
-     */
-    private $slug;
+    protected $slug;
 
     /**
      * @var string
      *
      * @ORM\Column(name="content", type="text")
      */
-    private $content;
-
-    /**
-     * @var \stdClass
-     *
-     * @ORM\Column(name="creator", type="object")
-     */
-    private $creator;
+    protected $content;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="public", type="boolean")
+     * @ORM\Column(name="public", type="boolean", nullable=true)
      */
-    private $public;
+    protected $public;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="hit", type="integer")
+     * @ORM\Column(name="hit", type="integer", nullable=true)
      */
-    private $hit;
+    protected $hit;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="createdAt", type="datetime")
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="editedAt", type="datetime")
+     */
+    protected $editedAt;
+
+    /**
+     *
+     * @ORM\oneToOne(targetEntity="Rudak\BlogBundle\Entity\Picture")
+     */
+    protected $picture;
 
     public function __construct()
     {
-        $this->hit = 0;
+        $this->hit    = 0;
+        $this->public = false;
     }
 
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function __toString()
     {
-        return $this->id;
-    }
-
-    /**
-     * Set createDate
-     *
-     * @param \DateTime $createDate
-     * @return Post
-     */
-    public function setCreateDate($createDate)
-    {
-        $this->createDate = $createDate;
-
-        return $this;
-    }
-
-    /**
-     * Get createDate
-     *
-     * @return \DateTime
-     */
-    public function getCreateDate()
-    {
-        return $this->createDate;
-    }
-
-    /**
-     * Set lastEditDate
-     *
-     * @param \DateTime $lastEditDate
-     * @return Post
-     */
-    public function setLastEditDate($lastEditDate)
-    {
-        $this->lastEditDate = $lastEditDate;
-
-        return $this;
-    }
-
-    /**
-     * Get lastEditDate
-     *
-     * @return \DateTime
-     */
-    public function getLastEditDate()
-    {
-        return $this->lastEditDate;
+        return $this->getSlug();
     }
 
     /**
      * Set title
      *
      * @param string $title
-     * @return Post
      */
-    public function setTitle($title)
+    protected function setTitle($title)
     {
         $this->title = $title;
 
@@ -157,7 +96,7 @@ class Post
      *
      * @return string
      */
-    public function getTitle()
+    protected function getTitle()
     {
         return $this->title;
     }
@@ -166,9 +105,8 @@ class Post
      * Set slug
      *
      * @param string $slug
-     * @return Post
      */
-    public function setSlug($slug)
+    protected function setSlug($slug)
     {
         $this->slug = $slug;
 
@@ -180,7 +118,7 @@ class Post
      *
      * @return string
      */
-    public function getSlug()
+    protected function getSlug()
     {
         return $this->slug;
     }
@@ -189,9 +127,8 @@ class Post
      * Set content
      *
      * @param string $content
-     * @return Post
      */
-    public function setContent($content)
+    protected function setContent($content)
     {
         $this->content = $content;
 
@@ -203,41 +140,17 @@ class Post
      *
      * @return string
      */
-    public function getContent()
+    protected function getContent()
     {
         return $this->content;
-    }
-
-    /**
-     * Set creator
-     *
-     * @param \stdClass $creator
-     * @return Post
-     */
-    public function setCreator($creator)
-    {
-        $this->creator = $creator;
-
-        return $this;
-    }
-
-    /**
-     * Get creator
-     *
-     * @return \stdClass
-     */
-    public function getCreator()
-    {
-        return $this->creator;
     }
 
     /**
      * Set public
      *
      * @param boolean $public
-     * @return Post
      */
-    public function setPublic($public)
+    protected function setPublic($public)
     {
         $this->public = $public;
 
@@ -249,7 +162,7 @@ class Post
      *
      * @return boolean
      */
-    public function getPublic()
+    protected function getPublic()
     {
         return $this->public;
     }
@@ -258,9 +171,8 @@ class Post
      * Set hit
      *
      * @param integer $hit
-     * @return Post
      */
-    public function setHit($hit)
+    protected function setHit($hit)
     {
         $this->hit = $hit;
 
@@ -272,8 +184,103 @@ class Post
      *
      * @return integer
      */
-    public function getHit()
+    protected function getHit()
     {
         return $this->hit;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     * @return Test
+     */
+    protected function setCreatedAt(\Datetime $createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime
+     */
+    protected function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set editedAt
+     *
+     * @param \DateTime $editedAt
+     * @return Test
+     */
+    protected function setEditedAt(\Datetime $editedAt)
+    {
+        $this->editedAt = $editedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get editedAt
+     *
+     * @return \DateTime
+     */
+    protected function getEditedAt()
+    {
+        return $this->editedAt;
+    }
+
+
+    /**
+     * Set picture
+     *
+     * @param \stdClass $picture
+     */
+    protected function setPicture($picture)
+    {
+        $this->picture = $picture;
+
+        return $this;
+    }
+
+    /**
+     * Get picture
+     *
+     * @return \stdClass
+     */
+    protected function getPicture()
+    {
+        return $this->picture;
+    }
+
+
+    /**
+     * @param object $creator
+     */
+    protected function setCreator($creator)
+    {
+        $this->creator = $creator;
+    }
+
+    /**
+     * @return user object
+     */
+    protected function getCreator()
+    {
+        return $this->creator;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     */
+    public function preSlugTheTitle()
+    {
+        $this->setSlug((new Slug())->setString($this->getTitle())->getSlug());
     }
 }

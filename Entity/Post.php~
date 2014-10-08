@@ -1,0 +1,30 @@
+<?php
+
+namespace Rudak\BlogBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * Post
+ *
+ * @ORM\Table()
+ * @ORM\MappedSuperclass
+ */
+abstract class Post
+{
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="title", type="string", length=150)
+     */
+    protected $title;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="slug", type="string", length=160)
+     */
+    protected $slug;
+
+}

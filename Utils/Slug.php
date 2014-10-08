@@ -2,11 +2,6 @@
 
 namespace Rudak\BlogBundle\Utils;
 
-/**
- * Description of Slug
- *
- * @author rudak
- */
 class Slug
 {
 
