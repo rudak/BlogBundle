@@ -1,3 +1,0 @@
-rudak_blog_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: RudakBlogBundle:Default:index }
