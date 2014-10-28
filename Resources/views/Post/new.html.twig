@@ -1,0 +1,54 @@
+{% extends admin_layout %}
+
+{% block layout %}
+    <h1>Post creation</h1>
+
+    {{ form_start(form) }}
+    {{ form_errors(form) }}
+
+    <div class="form-group">
+        {{ form_label(form.title) }}
+        {{ form_errors(form.title) }}
+        {{ form_widget(form.title) }}
+    </div>
+    <div class="form-group">
+        {{ form_label(form.content) }}
+        {{ form_errors(form.content) }}
+        {{ form_widget(form.content) }}
+    </div>
+    <div class="form-group">
+        {{ form_label(form.picture) }}
+        {{ form_errors(form.picture) }}
+        {{ form_widget(form.picture) }}
+    </div>
+    <div class="checkbox">
+        {{ form_label(form.public) }}
+        {{ form_errors(form.public) }}
+        {{ form_widget(form.public) }}
+    </div>
+
+    {{ form_end(form) }}
+{% endblock %}
+
+
+
+
+
+
+{% block stylesheets %}
+    {% stylesheets
+    '@RudakBlogBundle/Resources/public/css/redactor.css' %}
+    <link rel="stylesheet" href="{{ asset_url }}">
+    {% endstylesheets %}
+{% endblock %}
+
+{% block javascripts %}
+    {% javascripts
+    '@RudakBlogBundle/Resources/public/js/redactor.js' %}
+    <script src="{{ asset_url }}"></script>
+    <script type="text/javascript">
+        $("#rudak_blogbundle_post_content").redactor();
+    </script>
+    {% endjavascripts %}
+{% endblock %}
+
