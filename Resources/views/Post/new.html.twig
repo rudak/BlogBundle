@@ -47,7 +47,12 @@
     '@RudakBlogBundle/Resources/public/js/redactor.js' %}
     <script src="{{ asset_url }}"></script>
     <script type="text/javascript">
-        $("#rudak_blogbundle_post_content").redactor();
+        $(function()
+        {
+            $("#rudak_blogbundle_post_content").redactor({
+                imageUpload: '/your_image_upload_script/',
+            });
+        });
     </script>
     {% endjavascripts %}
 {% endblock %}

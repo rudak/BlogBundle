@@ -1,0 +1,28 @@
+{
+    "name": "rudak/blog-bundle",
+    "type": "symfony-bundle",
+    "description": "Symfony BlogBundle, a simple blog for Symfony2",
+    "keywords": ["blog","posts"],
+    "license": "GPL-3.0+",
+    "authors": [
+        {
+            "name": "Kadur Arnaud",
+            "email": "contact@kadur-arnaud.fr",
+            "homepage": "http://kadur-arnaud.fr"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2",
+        "symfony/framework-bundle": ">=2.1",
+        "twig/twig": "*",
+        "friendsofsymfony/jsrouting-bundle": "@stable",
+        "rudak/slug-bundle": "dev-master"
+    },
+    "autoload": {
+        "psr-0": {
+            "Rudak\\BlogBundle": ""
+        }
+    },
+    "target-dir": "Rudak/BlogBundle",
+    "minimum-stability": "dev"
+}
