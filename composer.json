@@ -20,5 +20,5 @@
         }
     },
     "target-dir": "Rudak/BlogBundle",
-    "minimum-stability": "dev"
+    "minimum-stability": "stable"
 }

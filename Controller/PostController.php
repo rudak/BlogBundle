@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Rudak\BlogBundle\Entity\Post;
 use Rudak\BlogBundle\Form\PostType;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Post controller.
@@ -230,4 +231,5 @@ class PostController extends Controller
             ->add('submit', 'submit', array('label' => 'Delete'))
             ->getForm();
     }
+
 }

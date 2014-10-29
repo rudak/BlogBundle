@@ -46,11 +46,12 @@
     {% javascripts
     '@RudakBlogBundle/Resources/public/js/redactor.js' %}
     <script src="{{ asset_url }}"></script>
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
     <script type="text/javascript">
-        $(function()
-        {
+        $(function () {
             $("#rudak_blogbundle_post_content").redactor({
-                imageUpload: '/your_image_upload_script/',
+                imageUpload: Routing.generate('admin_upload_picture')
             });
         });
     </script>

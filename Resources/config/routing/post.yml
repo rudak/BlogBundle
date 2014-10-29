@@ -28,3 +28,10 @@ admin_blog_post_delete:
     path:     /{id}/delete
     defaults: { _controller: "RudakBlogBundle:Post:delete" }
     requirements: { _method: post|delete }
+
+admin_upload_picture:
+    path:     /upload-post-picture
+    defaults: { _controller: "RudakBlogBundle:Upload:uploadPicture" }
+    requirements: { _method: post|GET }
+    options:
+        expose: true

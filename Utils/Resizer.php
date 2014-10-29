@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Rudak
- * Date: 26/07/14
- * Time: 11:50
- */
 
 namespace Rudak\BlogBundle\Utils;
 
