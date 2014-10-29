@@ -13,17 +13,22 @@ class UploadController extends Controller
     {
 
         $upload = new Uploader(array(
-            'index'         => 'photo',
-            'max_file_size' => 1
+            'index'          => 'file',
+            'new_width'      => 1100,
+            'new_height'     => 800,
+            'resize_quality' => 75
         ));
 
         $upload->setNewName();
         $upload->setDestination('uploads/test/');
         $upload->addAllowedMimeType(array('image/jpeg', 'image/gif', 'image/png'));
+        $upload->useResizer();
         $upload->process();
-        var_dump($upload);
 
-        return new Response($this->getHtml());
+        return new Response(var_dump($upload));
+
+        //return new Response($upload->getUploadResult());
+        //return new Response($this->getHtml());
     }
 
     private function getHtml()
