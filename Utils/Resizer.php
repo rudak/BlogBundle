@@ -192,13 +192,13 @@ class Resizer
             case '.jpg':
             case '.jpeg':
                 if (imagetypes() & IMG_JPG) {
-                    imagejpeg($this->imageResized, $savePath, $imageQuality);
+                    $result = imagejpeg($this->imageResized, $savePath, $imageQuality);
                 }
                 break;
 
             case '.gif':
                 if (imagetypes() & IMG_GIF) {
-                    imagegif($this->imageResized, $savePath);
+                    $result = imagegif($this->imageResized, $savePath);
                 }
                 break;
 
@@ -210,7 +210,7 @@ class Resizer
                 $invertScaleQuality = 9 - $scaleQuality;
 
                 if (imagetypes() & IMG_PNG) {
-                    imagepng($this->imageResized, $savePath, $invertScaleQuality);
+                    $result = imagepng($this->imageResized, $savePath, $invertScaleQuality);
                 }
                 break;
 
@@ -218,10 +218,12 @@ class Resizer
 
             default:
                 // *** No extension - No save.
+                $result = false;
                 break;
         }
 
         imagedestroy($this->imageResized);
+        return $result;
     }
 
     ## --------------------------------------------------------

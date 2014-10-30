@@ -4,6 +4,7 @@ namespace Rudak\BlogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Rudak\BlogBundle\Utils\Slug;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Post
@@ -40,7 +41,7 @@ class Post
     /**
      * @var string
      *
-     * @ORM\Column(name="content", type="text")
+     * @ORM\Column(name="content", type="text", nullable=true)
      */
     private $content;
 
@@ -73,6 +74,7 @@ class Post
     private $creatorId;
 
     /**
+     * @Assert\Valid
      * @var string
      * @ORM\OneToOne(targetEntity="Picture",cascade={"remove","persist"})
      */

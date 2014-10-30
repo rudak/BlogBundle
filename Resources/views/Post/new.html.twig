@@ -30,11 +30,6 @@
     {{ form_end(form) }}
 {% endblock %}
 
-
-
-
-
-
 {% block stylesheets %}
     {% stylesheets
     '@RudakBlogBundle/Resources/public/css/redactor.css' %}
@@ -50,8 +45,13 @@
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
     <script type="text/javascript">
         $(function () {
+            // http://imperavi.com/redactor/examples/
             $("#rudak_blogbundle_post_content").redactor({
-                imageUpload: Routing.generate('admin_upload_picture')
+                buttonSource: true,
+                imageUpload: Routing.generate('admin_upload_picture'),
+                imageUploadErrorCallback: function (json) {
+                    alert(json.error);
+                }
             });
         });
     </script>

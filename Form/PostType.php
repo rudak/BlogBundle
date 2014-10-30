@@ -22,10 +22,12 @@ class PostType extends AbstractType
                 )
             ))
             ->add('content', 'textarea', array(
-                'label' => false,
-                'attr'  => array(
-                    'class' => 'form-control'
-                )
+                'label'    => false,
+                'attr'     => array(
+                    'class'       => 'form-control',
+                    'placeholder' => 'Ajouter votre contenu...'
+                ),
+                'required' => false
             ))
             ->add('picture', new PictureType(), array(
                 'label'    => false,
