@@ -4,7 +4,7 @@ namespace Rudak\BlogBundle\Utils\Uploader;
 use Rudak\BlogBundle\Utils\Uploader\UploaderModel;
 use Rudak\BlogBundle\Utils\Resizer;
 
-class Uploader
+class Uploader extends UploaderModel
 {
 
     const FILE_INDEX = 'index';
@@ -17,21 +17,6 @@ class Uploader
     const RESIZE_QUALITY = 'resize_quality';
 
     const DEBUG_UPLOADER = false;
-
-
-    private $file;
-    private $maxfilesize;
-    private $minfilesize;
-    private $allowedMimetypes;
-    private $directory;
-    private $destination;
-    private $newname;
-    private $extension;
-    private $upload_result;
-    private $error;
-    private $resize;
-    private $newSize = array();
-
 
     function __construct(array $config = null)
     {
@@ -89,62 +74,6 @@ class Uploader
         }
     }
 
-    /*
-     * LOance l'opération de redimensionement
-     */
-    private function resizeUploadedFile()
-    {
-        $Resizer = new Resizer($this->getAbsolutePath());
-        $Resizer->resizeImage($this->newSize['width'], $this->newSize['height']);
-        if ($Resizer->saveImage($this->getAbsolutePath())) {
-            $this->upload_result .= ' & Resized';
-        } else {
-            $this->error++;
-            $this->upload_result = 'resize error';
-        }
-    }
-
-    /*
-     * Envoi du fichier temporaire vers la destination adéquate
-     */
-    private function moveUploadedFile()
-    {
-        return @move_uploaded_file($this->file['tmp_name'], $this->getAbsolutePath());
-    }
-
-    /*
-     * Récupération de l'extension du fichier
-     */
-    private function setFileExtension()
-    {
-        $finfo    = finfo_open(FILEINFO_MIME_TYPE);
-        $mimetype = finfo_file($finfo, $this->file['tmp_name']);
-        finfo_close($finfo);
-        if (in_array($mimetype, $this->getAllowedMimetypes())) {
-            switch ($mimetype) {
-                case 'image/jpeg';
-                    $this->extension = 'jpg';
-                    break;
-                case 'image/jpg';
-                    $this->extension = 'jpg';
-                    break;
-                case 'image/pjpeg';
-                    $this->extension = 'jpg';
-                    break;
-                case 'image/png';
-                    $this->extension = 'png';
-                    break;
-                case 'image/gif';
-                    $this->extension = 'gif';
-                    break;
-            }
-        } else {
-            $this->error++;
-            $this->upload_result = 'Extension error';
-            $this->throwExceptions('Le type mime "' . $mimetype . '" ne permet pas de récuperer l\'extension');
-        }
-    }
-
     /**
      * Ajouter un ou plusieurs (array) types mime autorisés.
      * @param $mimetype
@@ -155,18 +84,6 @@ class Uploader
             $allowedMimeType        = $this->getAllowedMimetypes();
             $allowedMimeType[]      = $mimetype;
             $this->allowedMimetypes = $allowedMimeType;
-        }
-    }
-
-    /*
-     * Liste des mime types images connus.
-     */
-    private function getAllowedMimetypes()
-    {
-        if (null == $this->allowedMimetypes) {
-            return array('image/jpeg', 'image/pjpeg', 'image/jpg', 'image/png', 'image/gif', 'image/bmp', 'image/tiff');
-        } else {
-            return $this->allowedMimetypes;
         }
     }
 
@@ -189,29 +106,6 @@ class Uploader
     }
 
     /*
-     * Vérifie la destination donnée en parametres
-     */
-    private function checkDestination($dir)
-    {
-        if (!file_exists($dir)) {
-            $this->upload_result = 'Destination error';
-            $this->throwExceptions(sprintf('Le répertoire "%s" n\'existe pas.', $dir));
-            return false;
-        }
-        if (!is_dir($dir)) {
-            $this->upload_result = 'Destination error';
-            $this->throwExceptions(sprintf('Le répertoire "%s" n\'est pas un dossier.', $dir));
-            return false;
-        }
-        if (!is_writable($dir)) {
-            $this->upload_result = 'Destination error';
-            $this->throwExceptions(sprintf('Le répertoire "%s" n\'est pas writable.', $dir));
-            return false;
-        }
-        return true;
-    }
-
-    /*
      * Renvoie le chemin complet, incluant le nouveau fichier
      */
     public function getAbsolutePath()
@@ -222,11 +116,6 @@ class Uploader
     public function getWebPath()
     {
         return $this->directory . '/' . $this->getFileName();
-    }
-
-    private function getFileName()
-    {
-        return $this->newname . '.' . $this->extension;
     }
 
 #TODO methode min file size
@@ -240,39 +129,6 @@ class Uploader
     {
         if ($this->checkMaxFilesize($int)) {
             $this->maxfilesize = $int * 1024 * 1024;
-        }
-    }
-
-    /*
-     * Vérifie la taille fournie en parametre
-     */
-    private function checkMaxFilesize($int)
-    {
-        if (!(is_numeric($int) && $int > 0 && $int < 14)) {
-            $this->error++;
-            $this->upload_result = 'Size argument error';
-            $this->throwExceptions('La taille maximum doit etre spécifiée en Mo');
-        }
-        return true;
-    }
-
-    /*
-     * Vérifie si la taille du fichier est dans la tolérance définie par min et max
-     */
-    private function isFilesizeValid()
-    {
-        if ($this->maxfilesize >= $this->file['size']) {
-            if ($this->minfilesize <= $this->file['size']) {
-                return;
-            } else {
-                $this->error++;
-                $this->upload_result = 'Filesize error';
-                $this->throwExceptions('Taille du fichier inférieure au minimum requis.');
-            }
-        } else {
-            $this->error++;
-            $this->upload_result = 'Filesize error';
-            $this->throwExceptions('Taille du fichier supérieure au maximum requis');
         }
     }
 
@@ -313,12 +169,6 @@ class Uploader
         return $this->upload_result;
     }
 
-    private function throwExceptions($message)
-    {
-        if (Uploader::DEBUG_UPLOADER) {
-            throw new \InvalidArgumentException($message);
-        }
-    }
 
     public function is_error()
     {
@@ -361,39 +211,4 @@ class Uploader
     }
 
 
-    private function checkUploadError()
-    {
-
-        switch ($this->file['error']) {
-            case UPLOAD_ERR_OK:
-                return;
-                break;
-            case UPLOAD_ERR_INI_SIZE:
-                $message = "The uploaded file exceeds the upload_max_filesize directive in php.ini";
-                break;
-            case UPLOAD_ERR_FORM_SIZE:
-                $message = "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form";
-                break;
-            case UPLOAD_ERR_PARTIAL:
-                $message = "The uploaded file was only partially uploaded";
-                break;
-            case UPLOAD_ERR_NO_FILE:
-                $message = "No file was uploaded";
-                break;
-            case UPLOAD_ERR_NO_TMP_DIR:
-                $message = "Missing a temporary folder";
-                break;
-            case UPLOAD_ERR_CANT_WRITE:
-                $message = "Failed to write file to disk";
-                break;
-            case UPLOAD_ERR_EXTENSION:
-                $message = "File upload stopped by extension";
-                break;
-            default:
-                $message = "Unknown upload error";
-                break;
-        }
-        $this->error++;
-        $this->upload_result = $message;
-    }
-} 
+}
