@@ -1,214 +1,254 @@
 <?php
 namespace Rudak\BlogBundle\Utils\Uploader;
 
-use Rudak\BlogBundle\Utils\Uploader\UploaderModel;
 use Rudak\BlogBundle\Utils\Resizer;
 
-class Uploader extends UploaderModel
+class Uploader
 {
-
-    const FILE_INDEX = 'index';
-    const MAX_FILE_SIZE = 'max_file_size';
-    const MIN_FILE_SIZE = 'min_file_size';
-    const UPLOAD_DIR = 'upload_dir';
-    const NEW_NAME = 'new_name';
-    const NEW_WIDTH = 'new_width';
-    const NEW_HEIGHT = 'new_height';
+    const DIR = 'dir';
+    const FILE_INDEX = 'file';
+    const UPLOAD_MAX_SIZE = 'max_size';
+    const UPLOAD_MIN_SIZE = 'min_size';
+    const UPLOAD_MIN_HEIGHT = 'min_height';
+    const UPLOAD_MIN_WIDTH = 'min_width';
+    const NEWNAME_PREFIX = 'prefix';
+    const RESIZE_NEW_WIDTH = 'new_width';
+    const RESIZE_NEW_HEIGHT = 'new_height';
     const RESIZE_QUALITY = 'resize_quality';
 
-    const DEBUG_UPLOADER = false;
+    private $file;
+    private $config;
+    private $newName;
+    private $debug;
+    private $extension;
 
-    function __construct(array $config = null)
+    public function __construct(array $config)
     {
-        $this->maxfilesize   = 6 * 1024 * 1024;
-        $this->minfilesize   = 0;
-        $this->destination   = realpath(__DIR__);
-        $this->upload_result = 'Pending...';
-        $this->resize        = false;
-
-        if (isset($config[Uploader::FILE_INDEX])) {
-            $this->file = $_FILES[$config[Uploader::FILE_INDEX]];
-        }
-        if (isset($config[Uploader::MAX_FILE_SIZE])) {
-            $this->maxfilesize = $config[Uploader::MAX_FILE_SIZE];
-        }
-        if (isset($config[Uploader::MIN_FILE_SIZE])) {
-            $this->minfilesize = $config[Uploader::MIN_FILE_SIZE];
-        }
-        if (isset($config[Uploader::UPLOAD_DIR])) {
-            $this->destination = $config[Uploader::UPLOAD_DIR];
-        }
-        if (isset($config[Uploader::NEW_NAME])) {
-            $this->newname = $config[Uploader::NEW_NAME];
-        }
-        if (isset($config[Uploader::NEW_WIDTH])) {
-            $this->newSize['width'] = $config[Uploader::NEW_WIDTH];
-        }
-        if (isset($config[Uploader::NEW_HEIGHT])) {
-            $this->newSize['height'] = $config[Uploader::NEW_HEIGHT];
-        }
-        if (isset($config[Uploader::RESIZE_QUALITY])) {
-            $this->newSize['quality'] = $config[Uploader::RESIZE_QUALITY];
-        }
+        $this->config = $config;
     }
 
-    /*
-     * Lance l'opération d'upload
-     */
-    public function process()
+    public function is_a_file_uploaded()
     {
-        $this->checkUploadError();
-
-        if ($this->is_error()) {
-            return false;
-        }
-
-        $this->isFilesizeValid();
-        $this->setFileExtension();
-
-        if ($this->moveUploadedFile()) {
-            $this->upload_result = 'Success';
-        }
-        if ($this->resize) {
-            $this->resizeUploadedFile();
-        }
-    }
-
-    /**
-     * Ajouter un ou plusieurs (array) types mime autorisés.
-     * @param $mimetype
-     */
-    public function addAllowedMimeType($mimetype)
-    {
-        if (!in_array(strtolower($mimetype), $this->getAllowedMimetypes())) {
-            $allowedMimeType        = $this->getAllowedMimetypes();
-            $allowedMimeType[]      = $mimetype;
-            $this->allowedMimetypes = $allowedMimeType;
-        }
-    }
-
-    /*
-     * Crée le chemin absolu de destination
-     */
-    public function setDestination($dir)
-    {
-        $dir = rtrim(rtrim($dir, '/'), '\\');
-
-        if ($this->checkDestination($dir)) {
-            $this->directory   = $dir;
-            $this->destination = realpath($dir);
+        if (null != $_FILES) {
+            return true;
         } else {
-            $this->error++;
+            $this->debug = 'No files uploaded.';
             return false;
         }
 
-        return $this;
     }
 
-    /*
-     * Renvoie le chemin complet, incluant le nouveau fichier
-     */
-    public function getAbsolutePath()
+    public function indexExists()
     {
-        return $this->destination . '/' . $this->getFileName();
+        if (isset($_FILES[$this->config[self::FILE_INDEX]])) {
+            $this->file = $_FILES[$this->config[self::FILE_INDEX]];
+        } else {
+            $this->debug = sprintf('Index "%s" doesn\'t exist in $_FILES array.', $this->config[self::FILE_INDEX]);
+            return false;
+        }
+        return true;
+    }
+
+    public function checkUploadError()
+    {
+
+        switch ($this->file['error']) {
+            case UPLOAD_ERR_OK:
+                return false;
+                break;
+            case UPLOAD_ERR_INI_SIZE:
+                $this->debug = "The uploaded file exceeds the upload_max_filesize directive in php.ini";
+                break;
+            case UPLOAD_ERR_FORM_SIZE:
+                $this->debug = "The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form";
+                break;
+            case UPLOAD_ERR_PARTIAL:
+                $this->debug = "The uploaded file was only partially uploaded";
+                break;
+            case UPLOAD_ERR_NO_FILE:
+                $this->debug = "No file was uploaded";
+                break;
+            case UPLOAD_ERR_NO_TMP_DIR:
+                $this->debug = "Missing a temporary folder";
+                break;
+            case UPLOAD_ERR_CANT_WRITE:
+                $this->debug = "Failed to write file to disk";
+                break;
+            case UPLOAD_ERR_EXTENSION:
+                $this->debug = "File upload stopped by extension";
+                break;
+            default:
+                $this->debug = "Unknown upload error";
+                break;
+        }
+        return true;
+    }
+
+
+    public function isSizeOk()
+    {
+        $minOctets = $this->getStringToOctets($this->config[self::UPLOAD_MIN_SIZE]);
+        $maxOctets = $this->getStringToOctets($this->config[self::UPLOAD_MAX_SIZE]);
+        if ($minOctets >= $this->file['size']) {
+            $this->debug = sprintf('The file is not big enough (%s)', $this->file['size']);
+            return false;
+        }
+        if ($maxOctets < $this->file['size']) {
+            $this->debug = sprintf('The file is too big (%s)', $this->file['size']);
+            return false;
+        }
+        return true;
+    }
+
+    public function moveTheFile()
+    {
+        $this->setNewName();
+        $result = move_uploaded_file($this->file['tmp_name'], $this->getAbsoluteFile());
+        if ($result) {
+            return true;
+        } else {
+            $this->debug = sprintf('Impossible de deplacer le fichier temporaire vers "%s"', $this->getAbsoluteFile());
+        }
+    }
+
+    public function isDirExists()
+    {
+        $dir = $this->getAbsoluteDir();
+
+        if (!file_exists($dir)) {
+            $this->debug = sprintf('Ce chemin "%s" n\'existe pas.', $dir);
+            return false;
+        }
+        if (!is_dir($dir)) {
+            $this->debug = sprintf('Ce chemin "%s" ne pointe pas vers un dossier.', $dir);
+            return false;
+        }
+        if (!is_writable($dir)) {
+            $this->debug = sprintf('Ce chemin "%s" n\'est pas writable.', $dir);
+            return false;
+        }
+        return true;
+    }
+
+    public function setNewName($length = 8)
+    {
+        $this->setFileExtension();
+        $alpha         = 'abcdefghijklmnopqrstuvwxyz';
+        $newstr        = str_repeat(str_shuffle($alpha . strtoupper($alpha) . '0123456789'), 2);
+        $this->newName = $this->getPrefix() . substr($newstr, rand(0, 26), $length) . '.' . $this->extension;
+    }
+
+    private function getPrefix()
+    {
+        return isset($this->config[self::NEWNAME_PREFIX]) ? $this->config[self::NEWNAME_PREFIX] : null;
+    }
+
+
+    private function setFileExtension()
+    {
+        $finfo    = finfo_open(FILEINFO_MIME_TYPE);
+        $mimetype = finfo_file($finfo, $this->file['tmp_name']);
+        finfo_close($finfo);
+
+        switch ($mimetype) {
+            case 'image/jpeg':
+                $this->extension = 'jpg';
+                break;
+            case 'image/jpg':
+                $this->extension = 'jpg';
+                break;
+            case 'image/pjpeg':
+                $this->extension = 'jpg';
+                break;
+            case 'image/png':
+                $this->extension = 'png';
+                break;
+            case 'image/gif':
+                $this->extension = 'gif';
+                break;
+            default:
+                $this->extension = 'xxx';
+                break;
+        }
+    }
+
+    private function getAbsoluteDir()
+    {
+        $path = './' . $this->config[self::DIR];
+        return realpath($path);
+    }
+
+    public function getAbsoluteFile()
+    {
+        return $this->getAbsoluteDir() . '/' . $this->newName;
     }
 
     public function getWebPath()
     {
-        return $this->directory . '/' . $this->getFileName();
+        return $this->config[self::DIR] . '/' . $this->newName;
     }
 
-#TODO methode min file size
-#TODO ajouter possibilité de prefixer les fichier
-
-    /**
-     * Set the max size in Mo
-     * @param $int
-     */
-    public function setMaxFilesize($int = 0)
+    public function isWidthOk()
     {
-        if ($this->checkMaxFilesize($int)) {
-            $this->maxfilesize = $int * 1024 * 1024;
-        }
-    }
-
-    /*
-     * Définition d'un nouveau nom de fichier
-     */
-    public function setNewName($str = null, $length = 8)
-    {
-        if (null != $str) {
-            $this->newname = $str;
-        } else {
-            if ($length < 3) {
-                $this->error++;
-                $this->upload_result = 'Newname error';
-                $this->throwExceptions('La taille de la chaine générée doit etre supérieure à 3 caractères !');
-            } elseif ($length > 26) {
-                $this->error++;
-                $this->upload_result = 'Newname error';
-                $this->throwExceptions('La taille de la chaine générée doit etre inférieure à 26 caractères !');
-            }
-            $alpha         = 'abcdefghijklmnopqrstuvwxyz';
-            $newstr        = str_repeat(str_shuffle($alpha . strtoupper($alpha) . '0123456789'), 2);
-            $this->newname = substr($newstr, rand(0, 26), $length);
-            unset($alpha);
-            unset($newstr);
-        }
-        return $this;
-    }
-
-    public function useResizer()
-    {
-        $this->resize = true;
-        return $this;
-    }
-
-    public function getUploadResult()
-    {
-        return $this->upload_result;
-    }
-
-
-    public function is_error()
-    {
-        return ($this->error > 0) ? true : false;
-    }
-
-    public static function is_file_uploaded()
-    {
-        return count($_FILES);
-    }
-
-    /**
-     * Vérifie si un fichier est vraiment une image ou alors une saloperie
-     *
-     * @param type $image_path
-     * @return boolean|string
-     */
-    public static function is_image($image_path)
-    {
-        if (!$f = fopen($image_path, 'rb')) {
+        $iz = getimagesize($this->file['tmp_name']);
+        if ($this->config[self::UPLOAD_MIN_WIDTH] > $iz[0]) {
+            $this->debug = sprintf('Width to small (%spx)', $iz[0]);
             return false;
         }
-
-        $data = fread($f, 8);
-        fclose($f);
-
-        $unpacked = unpack("H12", $data);
-        if (array_pop($unpacked) == '474946383961' || array_pop($unpacked) == '474946383761') {
-            return "gif";
+        if ($this->config[self::UPLOAD_MIN_HEIGHT] > $iz[1]) {
+            $this->debug = sprintf('Height to small (%spx)', $iz[1]);
+            return false;
         }
-        $unpacked = unpack("H4", $data);
-        if (array_pop($unpacked) == 'ffd8') {
-            return "jpg";
-        }
-        $unpacked = unpack("H16", $data);
-        if (array_pop($unpacked) == '89504e470d0a1a0a') {
-            return "png";
-        }
-        return false;
+        return true;
     }
 
+    private function getStringToOctets($str)
+    {
+        $kilo = 1024;
+        $mega = $kilo * 1024;
 
+        $str = strtolower($str);
+
+        if (strpos($str, 'ko')) {
+            return intval($str) * $kilo;
+        } else if (strpos($str, 'mo')) {
+            return intval($str) * $mega;
+        } else {
+            return intval($str);
+        }
+    }
+
+    public function checkResizeValues()
+    {
+        return (isset($this->config[self::RESIZE_NEW_WIDTH]) && isset($this->config[self::RESIZE_NEW_HEIGHT]) && isset($this->config[self::RESIZE_QUALITY])) ? true : false;
+    }
+
+    public function resizeIt()
+    {
+        $Resizer = new Resizer($this->getAbsoluteFile());
+        $Resizer->resizeImage($this->config[self::RESIZE_NEW_WIDTH], $this->config[self::RESIZE_NEW_HEIGHT]);
+
+        return $Resizer->saveImage($this->getAbsoluteFile()) ? true : false;
+    }
+
+    public function getDebugValue()
+    {
+        return $this->debug;
+    }
+
+    public function getDefaultOptions()
+    {
+        return array(
+            'dir'            => 'uploads/redactor_files',
+            'index'          => 'file',
+            'max_size'       => '6Mo',
+            'min_size'       => '150ko',
+            'min_width'      => 350,
+            'min_height'     => 400,
+            'new_width'      => 600,
+            'new_height'     => 600,
+            'resize_quality' => 65,
+            'prefix'         => 'abcd_'
+        );
+    }
 }

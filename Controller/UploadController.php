@@ -11,35 +11,47 @@ class UploadController extends Controller
 {
     public function uploadPictureAction()
     {
+        $config = array(
+            Uploader::DIR               => 'uploads/test',
+            Uploader::FILE_INDEX        => 'file',
+            Uploader::UPLOAD_MAX_SIZE   => '6Mo',
+            Uploader::UPLOAD_MIN_SIZE   => '50ko',
+            Uploader::UPLOAD_MIN_WIDTH  => 350,
+            Uploader::UPLOAD_MIN_HEIGHT => 400,
+            Uploader::RESIZE_NEW_WIDTH  => 600,
+            Uploader::RESIZE_NEW_HEIGHT => 600,
+            Uploader::RESIZE_QUALITY    => 65,
+            Uploader::NEWNAME_PREFIX    => 'rcf_' // Redactor Content File
+        );
 
+        $response = array();
+        $Uploader = new Uploader($config);
 
-
-        if (Uploader::is_file_uploaded()) {
-
-            $upload = new Uploader(array(
-                'index'          => 'file',
-                'new_width'      => 600,
-                'new_height'     => 600,
-                'resize_quality' => 65
-            ));
-
-            $upload->setNewName();
-            $upload->setDestination('uploads/test');
-            $upload->useResizer();
-            $upload->process();
-
-            $response = array(
-                'filelink' => $this->get_asset_url($upload->getWebPath())
-            );
-            if ($upload->is_error()) {
-                $response['error'] = $upload->getUploadResult();
+        if ($Uploader->is_a_file_uploaded()) {
+            if ($Uploader->indexExists()) {
+                if (!$Uploader->checkUploadError()) {
+                    if ($Uploader->isSizeOk()) {
+                        if ($Uploader->isWidthOk()) {
+                            if ($Uploader->isDirExists()) {
+                                if ($Uploader->moveTheFile()) {
+                                    $response['filelink'] = $this->get_asset_url($Uploader->getWebPath(), null);
+                                    if ($Uploader->checkResizeValues()) {
+                                        $Uploader->resizeIt();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
             }
-        } else {
-            $response['error'] = 'No uploaded files.'; // (Check the size limit ?)
         }
+
+        if ($Uploader->getDebugValue()) {
+            $response['error'] = $Uploader->getDebugValue();
+        }
+
         return new Response(stripslashes(json_encode($response)));
     }
-
 
     private function get_asset_url($path)
     {
