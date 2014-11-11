@@ -33,6 +33,7 @@ class loadPostData implements FixtureInterface
             $posts[$i]->setPublic(true);
             $posts[$i]->setCreatorName('fixtureMan');
             $manager->persist($posts[$i]);
+            echo '.';
         }
         $manager->flush();
     }
