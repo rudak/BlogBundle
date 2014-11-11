@@ -2,4 +2,10 @@ rudak_blog_admin_blog_post:
     resource: "@RudakBlogBundle/Resources/config/routing/post.yml"
     prefix:   /admin/blog/post
 
+rudak_blog_postlist:
+    path:     /blog
+    defaults: { _controller: RudakBlogBundle:Default:index }
 
+rudak_blog_post:
+    path:     /{id}/{slug}.html
+    defaults: { _controller: RudakBlogBundle:Default:show }

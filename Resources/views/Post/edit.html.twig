@@ -1,18 +1,38 @@
 {% extends admin_layout %}
 
 {% block layout %}
-    <h1>Post edit</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{ path('rcmAdminIndex') }}">Administration</a>
+        </li>
+        <li>
+            <a href="{{ path('admin_blog_post') }}">Articles</a>
+        </li>
+        <li class="active">Modifier un article</li>
+    </ol>
 
+    <p>
+        {% if entity.picture %}
+            <img
+                    src="{{ entity.picture.getwebpath|imagine_filter('post_pict_show') }}"
+                    alt="image_post_{{ entity.id }}"/>
+        {% else %}
+            <img
+                    src="{{ 'uploads/post_images/no-image.jpg'|imagine_filter('post_pict_show') }}"
+                    alt="no image"/>
+        {% endif %}
+    </p>
     {{ form(edit_form) }}
 
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('admin_blog_post') }}">
-            Back to the list
+    <hr/>
+    <p>
+        <a href="{{ path('admin_blog_post') }}" class="btn btn-default">
+            Retour a la liste
         </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    </p>
+
+    {{ form(delete_form) }}
+
 {% endblock %}
 
 {% block stylesheets %}

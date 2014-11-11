@@ -1,0 +1,31 @@
+{% extends 'RudakBlogBundle::layout.html.twig' %}
+
+{% block layout %}
+
+    <div class="row">
+        <div class="col-sm-6 col-md-8">
+            <h1>Liste des posts</h1>
+            {% for post in posts %}
+                <div class="post">
+                    <h2>{{ post.title }}</h2>
+
+                    <p>
+                        <small>
+                            Posté le {{ post.date|date('d/m/Y') }} par {{ post.creatorName }}
+                        </small>
+                    </p>
+                    <p>
+                        <a href="{{ path('rudak_blog_post',{id:post.id,slug:post.slug}) }}">
+                            Lire cet article
+                        </a>
+                    </p>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="col-sm-6 col-md-4">
+            <h2>Pub</h2>
+        </div>
+    </div>
+
+
+{% endblock %}

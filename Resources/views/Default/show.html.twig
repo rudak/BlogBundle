@@ -1,0 +1,30 @@
+{% extends main_layout %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-sm-12 col-md-8 col-lg-9">
+            {% if post.picture %}
+                <img src="{{ post.picture.getwebpath|imagine_filter('post_front_show') }}" alt="image {{ post.title }}"
+                     class="img-responsive postHeaderImg"/>
+            {% endif %}
+
+            <h1>{{ post.title }}</h1>
+
+            <div class="content">
+                {{ post.content|raw }}
+            </div>
+        </div>
+        <div class="col-sm-12 col-md-4 col-lg-3">
+            <h2>Infos</h2>
+
+            <p>
+                Posté le {{ post.date|date('d/m/Y') }} par {{ post.creatorName }}
+                <br/>
+                {{ post.hit }} {% if post.hit > 1 %}vues{% else %}vue{% endif %}
+            </p>
+
+            <h2>Derniers articles</h2>
+            {{ render(controller('RudakBlogBundle:Default:getLastPosts')) }}
+        </div>
+    </div>
+{% endblock %}

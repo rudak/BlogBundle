@@ -12,4 +12,37 @@ use Doctrine\ORM\EntityRepository;
  */
 class PostRepository extends EntityRepository
 {
+    public function getPostById($id)
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->addSelect('pic')
+            ->where('p.id = :id')->setParameter('id', $id)
+            ->andWhere('p.public = true')
+            ->leftJoin('p.picture', 'pic')
+            ->getQuery();
+        return $qb->getOneOrNullResult();
+    }
+
+    public function getLastPosts($nb)
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->where('p.public = true')
+            ->addOrderBy('p.id', 'DESC')
+            ->setMaxResults($nb)
+            ->getQuery();
+        return $qb->execute();
+    }
+
+    /*
+     *
+     */
+    public function getPostList($nb)
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->where('p.public = true')
+            ->addOrderBy('p.id', 'DESC')
+            ->setMaxResults($nb)
+            ->getQuery();
+        return $qb->execute();
+    }
 }

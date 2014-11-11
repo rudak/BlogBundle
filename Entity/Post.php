@@ -69,9 +69,9 @@ class Post
     /**
      * @var integer
      *
-     * @ORM\Column(name="creatorId", type="smallint")
+     * @ORM\Column(name="creatorName", type="string", length=50)
      */
-    private $creatorId;
+    private $creatorName;
 
     /**
      * @Assert\Valid
@@ -254,36 +254,11 @@ class Post
     }
 
     /**
-     * Set creatorId
-     *
-     * @param integer $creatorId
-     * @return Post
-     */
-    public function setCreatorId($creatorId)
-    {
-        $this->creatorId = $creatorId;
-
-        return $this;
-    }
-
-    /**
-     * Get creatorId
-     *
-     * @return integer
-     */
-    public function getCreatorId()
-    {
-        return $this->creatorId;
-    }
-
-
-
-    /**
      * Set picture
      *
      * @return Post
      */
-    public function setPicture( $picture = null)
+    public function setPicture($picture = null)
     {
         $this->picture = $picture;
 
@@ -293,10 +268,32 @@ class Post
     /**
      * Get picture
      *
-     * @return \Rudak\BlogBundle\Entity\Picture 
+     * @return \Rudak\BlogBundle\Entity\Picture
      */
     public function getPicture()
     {
         return $this->picture;
     }
+
+    /**
+     * @return int
+     */
+    public function getCreatorName()
+    {
+        return $this->creatorName;
+    }
+
+    /**
+     * @param int $creatorName
+     */
+    public function setCreatorName($creatorName)
+    {
+        $this->creatorName = $creatorName;
+    }
+
+    public function incrementHit()
+    {
+        $this->hit++;
+    }
+
 }

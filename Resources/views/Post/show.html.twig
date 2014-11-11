@@ -1,56 +1,86 @@
 {% extends admin_layout %}
 
 {% block layout %}
-    <h1>Post</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{ path('rcmAdminIndex') }}">Administration</a>
+        </li>
+        <li>
+            <a href="{{ path('admin_blog_post') }}">Articles</a>
+        </li>
+        <li class="active">Voir un article</li>
+    </ol>
 
-    <table class="record_properties">
+    <table class="table">
         <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ entity.id }}</td>
-            </tr>
-            <tr>
-                <th>Title</th>
-                <td>{{ entity.title }}</td>
-            </tr>
-            <tr>
-                <th>Slug</th>
-                <td>{{ entity.slug }}</td>
-            </tr>
-            <tr>
-                <th>Content</th>
-                <td>{{ entity.content }}</td>
-            </tr>
-            <tr>
-                <th>Date</th>
-                <td>{{ entity.date|date('Y-m-d H:i:s') }}</td>
-            </tr>
-            <tr>
-                <th>Public</th>
-                <td>{{ entity.public }}</td>
-            </tr>
-            <tr>
-                <th>Hit</th>
-                <td>{{ entity.hit }}</td>
-            </tr>
-            <tr>
-                <th>Creatorid</th>
-                <td>{{ entity.creatorId }}</td>
-            </tr>
+        <tr>
+            <th>Id</th>
+            <td>{{ entity.id }}</td>
+        </tr>
+        <tr>
+            <th>Title</th>
+            <td>{{ entity.title }}</td>
+        </tr>
+        <tr>
+            <th>Slug</th>
+            <td>{{ entity.slug }}</td>
+        </tr>
+        <tr>
+            <th>Image</th>
+            <td>
+                {% if entity.picture %}
+                    <img
+                            src="{{ entity.picture.getwebpath|imagine_filter('post_pict_show') }}"
+                            alt="image_post_{{ entity.id }}"/>
+                {% else %}
+                    <img
+                            src="{{ 'uploads/post_images/no-image.jpg'|imagine_filter('post_pict_show') }}"
+                            alt="no image"/>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Content</th>
+            <td class="well">{{ entity.content|raw }}</td>
+        </tr>
+        <tr>
+            <th>Date</th>
+            <td>{{ entity.date|date('Y-m-d H:i:s') }}</td>
+        </tr>
+        <tr>
+            <th>Public</th>
+            <td>
+                {% if entity.public %}
+                    <span class="label label-success">Oui</span>
+                {% else %}
+                    <span class="label label-warning">Non</span>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Hit</th>
+            <td>
+                <span class="badge">
+                    {{ entity.hit }}
+                    </span>
+            </td>
+        </tr>
+        <tr>
+            <th>Rédacteur</th>
+            <td>{{ entity.creatorName }}</td>
+        </tr>
         </tbody>
     </table>
-
-        <ul class="record_actions">
-    <li>
-        <a href="{{ path('admin_blog_post') }}">
-            Back to the list
+    <hr/>
+    <p>
+        <a href="{{ path('admin_blog_post') }}" class="btn btn-default">
+            Retour a la liste
         </a>
-    </li>
-    <li>
-        <a href="{{ path('admin_blog_post_edit', { 'id': entity.id }) }}">
-            Edit
+    </p>
+    <p>
+        <a href="{{ path('admin_blog_post_edit', { 'id': entity.id }) }}" class="btn btn-success">
+            Modifier
         </a>
-    </li>
-    <li>{{ form(delete_form) }}</li>
-</ul>
+    </p>
+    {{ form(delete_form) }}
 {% endblock %}

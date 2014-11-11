@@ -43,7 +43,7 @@ class PostController extends Controller
 
         if ($form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $entity->setCreatorId($this->getUser()->getId());
+            $entity->setCreatorName($this->getUser()->getUsername());
             $em->persist($entity);
             $em->flush();
 
@@ -156,7 +156,12 @@ class PostController extends Controller
             'method' => 'PUT',
         ));
 
-        $form->add('submit', 'submit', array('label' => 'Update'));
+        $form->add('submit', 'submit', array(
+            'label' => 'Mettre à jour',
+            'attr'  => array(
+                'class' => 'btn btn-success btn-lg'
+            )
+        ));
 
         return $form;
     }
@@ -228,7 +233,12 @@ class PostController extends Controller
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('admin_blog_post_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('submit', 'submit', array('label' => 'Delete'))
+            ->add('submit', 'submit', array(
+                'label' => 'Delete',
+                'attr'  => array(
+                    'class' => 'btn btn-danger'
+                )
+            ))
             ->getForm();
     }
 
