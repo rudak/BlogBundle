@@ -15,15 +15,23 @@
                         </small>
                     </p>
                     <p>
-                        <a href="{{ path('rudak_blog_post',{id:post.id,slug:post.slug}) }}">
+                        <a href="{{ path('rudak_blog_post',{id:post.id,slug:post.slug}) }}" class="btn btn-default">
                             Lire cet article
                         </a>
                     </p>
                 </div>
             {% endfor %}
+            <hr/>
+            <nav>
+                <ul class="pagination">
+                    {{ pagination|raw }}
+                </ul>
+            </nav>
         </div>
         <div class="col-sm-6 col-md-4">
-            <h2>Pub</h2>
+            <h2>Prochain match</h2>
+            <h2>Dernier match</h2>
+            <h2>Classement</h2>
         </div>
     </div>
 

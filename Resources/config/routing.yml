@@ -3,9 +3,19 @@ rudak_blog_admin_blog_post:
     prefix:   /admin/blog/post
 
 rudak_blog_postlist:
-    path:     /blog
-    defaults: { _controller: RudakBlogBundle:Default:index }
+    path:     /{page}/blog
+    defaults: { _controller: RudakBlogBundle:Default:index, page :1 }
 
 rudak_blog_post:
     path:     /{id}/{slug}.html
     defaults: { _controller: RudakBlogBundle:Default:show }
+
+rudak_blog_prev_post:
+    path:     /{id}/prev-post
+    defaults: { _controller: RudakBlogBundle:Default:prevPost }
+
+rudak_blog_next_post:
+    path:     /{id}/next-post
+    defaults: { _controller: RudakBlogBundle:Default:nextPost }
+
+

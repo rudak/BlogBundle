@@ -24,14 +24,14 @@ class loadPostData implements FixtureInterface
     {
         $BaconIpsum = new BaconIpsum();
         $posts      = array();
-        for ($i = 0; $i <= 1; $i++) {
+        for ($i = 0; $i <= 20; $i++) {
             $posts[$i] = new Post();
             $posts[$i]->setTitle(Syllabeur::getMots(rand(2, 5)));
             $posts[$i]->setContent($BaconIpsum->get_content());
-            $posts[$i]->setDate(new \Datetime( rand(-20, -200) . ' day'));
+            $posts[$i]->setDate(new \DateTime('-250 day'));
             $posts[$i]->setHit(rand(0, 480));
             $posts[$i]->setPublic(true);
-            $posts[$i]->setCreatorName('fictureMan');
+            $posts[$i]->setCreatorName('fixtureMan');
             $manager->persist($posts[$i]);
         }
         $manager->flush();
