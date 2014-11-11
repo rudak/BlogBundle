@@ -12,6 +12,11 @@
         {{ form_widget(form.title) }}
     </div>
     <div class="form-group">
+        {{ form_label(form.hat) }}
+        {{ form_errors(form.hat) }}
+        {{ form_widget(form.hat) }}
+    </div>
+    <div class="form-group">
         {{ form_label(form.content) }}
         {{ form_errors(form.content) }}
         {{ form_widget(form.content) }}

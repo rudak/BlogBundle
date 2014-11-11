@@ -51,7 +51,7 @@ class DefaultController extends Controller
             $this->getEm()->persist($post);
             $this->getEm()->flush();
 
-            $cookie   = new Cookie('hit_' . $post->getId(), true, new \DateTime('+ 10 minute'));
+            $cookie   = new Cookie('hit_' . $post->getId(), true, new \DateTime('+2 day'));
             $response = $this->render('RudakBlogBundle:Default:show.html.twig', array(
                 'post' => $post
             ));

@@ -30,6 +30,7 @@ class PostRepository extends EntityRepository
             ->addSelect('pic')
             ->where('p.public = true')
             ->leftJoin('p.picture', 'pic')
+            ->orderBy('p.id', 'DESC')
             ->setMaxResults($nb_par_page)
             ->setFirstResult($first_result)
             ->getQuery();
@@ -76,7 +77,7 @@ class PostRepository extends EntityRepository
             ->addSelect('pic')
             ->where('p.public = true')
             ->andWhere('p.id < :id')->setParameter('id', $id)
-            ->leftJoin('p.picture','pic')
+            ->leftJoin('p.picture', 'pic')
             ->orderBy('p.id', 'DESC')
             ->setMaxResults(1)
             ->getQuery();
@@ -88,7 +89,7 @@ class PostRepository extends EntityRepository
                 ->addSelect('pic')
                 ->where('p.public = true')
                 ->orderBy('p.id', 'DESC')
-                ->leftJoin('p.picture','pic')
+                ->leftJoin('p.picture', 'pic')
                 ->setMaxResults(1)
                 ->getQuery();
             return $qb->getOneOrNullResult();
@@ -101,7 +102,7 @@ class PostRepository extends EntityRepository
             ->addSelect('pic')
             ->where('p.public = true')
             ->andWhere('p.id > :id')->setParameter('id', $id)
-            ->leftJoin('p.picture','pic')
+            ->leftJoin('p.picture', 'pic')
             ->orderBy('p.id', 'ASC')
             ->setMaxResults(1)
             ->getQuery();
@@ -111,7 +112,7 @@ class PostRepository extends EntityRepository
             $qb = $this->createQueryBuilder('p')
                 ->addSelect('pic')
                 ->where('p.public = true')
-                ->leftJoin('p.picture','pic')
+                ->leftJoin('p.picture', 'pic')
                 ->orderBy('p.id', 'ASC')
                 ->setMaxResults(1)
                 ->getQuery();

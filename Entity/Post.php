@@ -27,16 +27,24 @@ class Post
     /**
      * @var string
      *
-     * @ORM\Column(name="title", type="string", length=150)
+     * @ORM\Column(name="title", type="string", length=120)
      */
     private $title;
+
 
     /**
      * @var string
      *
-     * @ORM\Column(name="slug", type="string", length=150)
+     * @ORM\Column(name="slug", type="string", length=120)
      */
     private $slug;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="hat", type="string", length=255)
+     */
+    private $hat;
 
     /**
      * @var string
@@ -85,6 +93,7 @@ class Post
     {
         $this->hit    = 0;
         $this->public = false;
+        $this->date   = new \DateTime('NOW');
     }
 
     /**
@@ -95,14 +104,6 @@ class Post
     {
         $Slug = new Slug($this->getTitle());
         $this->setSlug($Slug->getSlug());
-    }
-
-    /**
-     * @ORM\PrePersist()
-     */
-    public function setPostDate()
-    {
-        $this->setDate(new \Datetime);
     }
 
     /**
@@ -159,6 +160,22 @@ class Post
     public function getSlug()
     {
         return $this->slug;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHat()
+    {
+        return $this->hat;
+    }
+
+    /**
+     * @param string $hat
+     */
+    public function setHat($hat)
+    {
+        $this->hat = $hat;
     }
 
     /**
@@ -294,6 +311,13 @@ class Post
     public function incrementHit()
     {
         $this->hit++;
+    }
+
+    public function getUniqUrl()
+    {
+        $date = $this->date->format(\DateTime::ATOM);
+        $slug = new Slug($this->id . ' ' . $date);
+        return $slug->getSlug() . '.html';
     }
 
 }

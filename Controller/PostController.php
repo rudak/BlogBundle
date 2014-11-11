@@ -24,7 +24,7 @@ class PostController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('RudakBlogBundle:Post')->findAll();
+        $entities = $em->getRepository('RudakBlogBundle:Post')->findBy(array(), array('id' => 'desc'));
 
         return $this->render('RudakBlogBundle:Post:index.html.twig', array(
             'entities' => $entities,

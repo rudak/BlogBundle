@@ -21,6 +21,12 @@ class PostType extends AbstractType
                     'class' => 'form-control'
                 )
             ))
+            ->add('hat', 'text', array(
+                'label' => 'Chapeau de l\'article',
+                'attr'  => array(
+                    'class' => 'form-control'
+                )
+            ))
             ->add('content', 'textarea', array(
                 'label'    => false,
                 'attr'     => array(

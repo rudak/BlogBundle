@@ -3,11 +3,15 @@
 {% block layout %}
 
     <div class="row">
-        <div class="col-sm-6 col-md-8">
+        <div class="col-sm-6 col-md-9">
             <h1>Liste des posts</h1>
             {% for post in posts %}
                 <div class="post">
-                    <h2>{{ post.title }}</h2>
+                    <h2>{{ post.title|capitalize }}</h2>
+
+                    <p class=" text-justify">
+                        {{ post.hat }}
+                    </p>
 
                     <p>
                         <small>
@@ -28,10 +32,9 @@
                 </ul>
             </nav>
         </div>
-        <div class="col-sm-6 col-md-4">
-            <h2>Prochain match</h2>
-            <h2>Dernier match</h2>
-            <h2>Classement</h2>
+        <div class="col-sm-6 col-md-3">
+            {{ render(controller('RudakBlogBundle:Default:getLastPosts')) }}
+            {{ render(controller('RudakBlogBundle:Default:getPopularPosts')) }}
         </div>
     </div>
 
