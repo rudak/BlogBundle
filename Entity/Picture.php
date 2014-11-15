@@ -16,6 +16,9 @@ use Rudak\BlogBundle\Utils\Resizer;
  */
 class Picture
 {
+
+    private $defaultImagePath = 'no-image.jpg';
+
     /**
      * @var integer
      *
@@ -99,7 +102,9 @@ class Picture
         // check if we have an old image
         if (isset($this->temp)) {
             // delete the old image
-            unlink($this->getUploadRootDir() . '/' . $this->temp);
+            if ($this->temp == $this->getDefaultImagePath()) {
+                unlink($this->getUploadRootDir() . '/' . $this->temp);
+            }
             // clear the temp image path
             $this->temp = null;
         }
@@ -107,12 +112,22 @@ class Picture
     }
 
     /**
+     * @ORM\PreRemove()
+     */
+    public function storeFilenameForRemove()
+    {
+        $this->temp = $this->getAbsolutePath();
+    }
+
+    /**
      * @ORM\PostRemove()
      */
     public function removeUpload()
     {
-        if ($file = $this->getAbsolutePath()) {
-            unlink($file);
+        if (isset($this->temp)) {
+            if ($this->temp != $this->getDefaultImagePath()) {
+                unlink($this->temp);
+            }
         }
     }
 
@@ -140,6 +155,11 @@ class Picture
         return null === $this->path
             ? null
             : $this->getUploadRootDir() . '/' . $this->path;
+    }
+
+    private function getDefaultImagePath()
+    {
+        return $this->getUploadDir() . '/' . $this->defaultImagePath;
     }
 
     public function getWebPath()

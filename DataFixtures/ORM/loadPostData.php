@@ -36,6 +36,7 @@ class loadPostData implements FixtureInterface
             $manager->persist($posts[$i]);
             echo '.';
         }
+        echo "\n";
         $manager->flush();
     }
 } 
