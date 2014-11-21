@@ -1,7 +1,15 @@
 {% extends admin_layout %}
 
 {% block layout %}
-    <h1>Post creation</h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="{{ path('rcmAdminIndex') }}">Administration</a>
+        </li>
+        <li>
+            <a href="{{ path('admin_blog_post') }}">Articles</a>
+        </li>
+        <li class="active">Créer un article</li>
+    </ol>
 
     {{ form_start(form) }}
     {{ form_errors(form) }}

@@ -12,7 +12,7 @@ class UploadController extends Controller
     public function uploadPictureAction()
     {
         $config = array(
-            Uploader::DIR               => 'uploads/test',
+            Uploader::DIR               => 'uploads/post_inserts',
             Uploader::FILE_INDEX        => 'file',
             Uploader::UPLOAD_MAX_SIZE   => '6Mo',
             Uploader::UPLOAD_MIN_SIZE   => '50ko',

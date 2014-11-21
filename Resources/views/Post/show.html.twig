@@ -14,8 +14,16 @@
     <table class="table">
         <tbody>
         <tr>
-            <th>Id</th>
-            <td>{{ entity.id }}</td>
+            <th>Image</th>
+            <td>
+                {% if entity.picture %}
+                    <img src="{{ entity.picture.getwebpath|imagine_filter('post_pict_show') }}"
+                         alt="image_post_{{ entity.id }}"/>
+                {% else %}
+                    <img src="{{ 'uploads/post_images/no-image.jpg'|imagine_filter('post_pict_show') }}"
+                         alt="no image"/>
+                {% endif %}
+            </td>
         </tr>
         <tr>
             <th>Titre</th>
@@ -24,20 +32,6 @@
         <tr>
             <th>Chapeau</th>
             <td>{{ entity.hat }}</td>
-        </tr>
-        <tr>
-            <th>Image</th>
-            <td>
-                {% if entity.picture %}
-                    <img
-                            src="{{ entity.picture.getwebpath|imagine_filter('post_pict_show') }}"
-                            alt="image_post_{{ entity.id }}"/>
-                {% else %}
-                    <img
-                            src="{{ 'uploads/post_images/no-image.jpg'|imagine_filter('post_pict_show') }}"
-                            alt="no image"/>
-                {% endif %}
-            </td>
         </tr>
         <tr>
             <th>Contenu</th>
