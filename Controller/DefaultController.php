@@ -71,6 +71,17 @@ class DefaultController extends Controller
         return $this->getDoctrine()->getManager();
     }
 
+    public function getLastPostForSliderAction($nb = 5)
+    {
+        $posts = $this->getRepo()->getLastPosts($nb);
+
+        $html = $this->renderView('RudakBlogBundle:Inc:indexSlider.html.twig', array(
+            'posts' => $posts
+        ));
+
+        return new Response($html);
+    }
+
     public function getLastPostsAction($nb = 5)
     {
         $posts = $this->getRepo()->getLastPosts($nb);
@@ -117,6 +128,7 @@ class DefaultController extends Controller
             'slug' => $post->getSlug(),
         )));
     }
+
     /**
      *
      * pagination(

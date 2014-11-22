@@ -88,6 +88,13 @@ class Post
      */
     private $picture;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="locked", type="boolean",nullable=true)
+     */
+    private $locked;
+
 
     public function __construct()
     {
@@ -318,6 +325,22 @@ class Post
         $date = $this->date->format(\DateTime::ATOM);
         $slug = new Slug($this->id . ' ' . $date);
         return $slug->getSlug() . '.html';
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isLocked()
+    {
+        return $this->locked;
+    }
+
+    /**
+     * @param boolean $locked
+     */
+    public function setLocked($locked)
+    {
+        $this->locked = $locked;
     }
 
 }

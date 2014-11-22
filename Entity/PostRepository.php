@@ -40,6 +40,8 @@ class PostRepository extends EntityRepository
     public function getLastPosts($nb)
     {
         $qb = $this->createQueryBuilder('p')
+            ->addSelect('pic')
+            ->leftJoin('p.picture','pic')
             ->where('p.public = true')
             ->addOrderBy('p.id', 'DESC')
             ->setMaxResults($nb)

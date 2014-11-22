@@ -32,6 +32,7 @@ class loadPostData implements FixtureInterface
             $posts[$i]->setDate(new \DateTime('-' . (rand(10, 200)) . 'day'));
             $posts[$i]->setHit(rand(0, 480));
             $posts[$i]->setPublic(rand(0, 1));
+            $posts[$i]->setLocked(false);
             $posts[$i]->setCreatorName('fixtureMan');
             $manager->persist($posts[$i]);
             echo '.';

@@ -43,6 +43,9 @@
                 <td>{{ entity.title }}</td>
                 <td>{% if entity.date %}{{ entity.date|date('Y-m-d H:i:s') }}{% endif %}</td>
                 <td>
+                    {% if entity.locked %}
+                        <span class="glyphicon glyphicon-lock"></span>
+                    {% endif %}
                     {% if entity.public %}
                         <span class="label label-success">Oui</span>
                     {% else %}

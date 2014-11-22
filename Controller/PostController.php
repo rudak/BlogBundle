@@ -180,9 +180,22 @@ class PostController extends Controller
             throw $this->createNotFoundException('Unable to find Post entity.');
         }
 
+
         $deleteForm = $this->createDeleteForm($id);
         $editForm   = $this->createEditForm($entity);
         $editForm->handleRequest($request);
+
+        if ($entity->isLocked()) {
+            // si le post est verrouillé
+            if (!$this->get('security.context')->isGranted('ROLE_SUPER_ADMIN')) {
+                // si on est pas super_admin
+                return $this->render('RudakBlogBundle:Post:edit.html.twig', array(
+                    'entity'      => $entity,
+                    'edit_form'   => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
+                ));
+            }
+        }
 
         if ($editForm->isValid()) {
             $em->flush();
@@ -214,8 +227,10 @@ class PostController extends Controller
                 throw $this->createNotFoundException('Unable to find Post entity.');
             }
 
-            $em->remove($entity);
-            $em->flush();
+            if (!$entity->isLocked()) {
+                $em->remove($entity);
+                $em->flush();
+            }
         }
 
         return $this->redirect($this->generateUrl('admin_blog_post'));

@@ -1,0 +1,10 @@
+<ul class="pgwSlider">
+    {% for post in posts %}
+        <li>
+            <img src="{{ post.picture.getwebpath|default('')|imagine_filter('post_front_show') }}"
+                 alt="{{ post.title|capitalize }}"
+                 data-description="{{ post.hat|capitalize }}"/>
+            <a class="btn btn-default" href="">coucou</a>
+        </li>
+    {% endfor %}
+</ul>
