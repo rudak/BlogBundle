@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Cookie;
 class DefaultController extends Controller
 {
 
+    const ACTIVE_ITEM = 'blog';
+
     /*
      * Renvoie la page $page de la liste des posts
      */
@@ -23,6 +25,7 @@ class DefaultController extends Controller
         if (!$posts) {
             throw $this->createNotFoundException('Impossible de trouver les posts');
         }
+        $this->get('MenuBundle.Handler')->setActiveItem(self::ACTIVE_ITEM);
         return $this->render('RudakBlogBundle:Default:index.html.twig', array(
             'posts'      => $posts,
             'pagination' => $this->pagination($NB_TOTAL_POSTS, $NB_PAR_PAGE, $page, $this->getLinkPattern()),
@@ -40,6 +43,8 @@ class DefaultController extends Controller
             throw $this->createNotFoundException('Unable to find Post entity.');
         }
         $hitted = $request->cookies->has('hit_' . $post->getId());
+
+        $this->get('MenuBundle.Handler')->setActiveItem(self::ACTIVE_ITEM);
 
         if ($hitted) {
             return $this->render('RudakBlogBundle:Default:show.html.twig', array(
