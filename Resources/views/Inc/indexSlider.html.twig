@@ -3,7 +3,7 @@
         <li>
             <a href="{{ path('rudak_blog_post',{id:post.id,slug:post.title|slugit}) }}" target="_self">
                 <img
-                        src="{{ post.picture.getwebpath|default('')|imagine_filter('post_front_show') }}"
+                        src="{{ post.picture.getwebpath|default('uploads/post_images/no-image.jpg')|imagine_filter('post_front_show') }}"
                         alt="{{ post.title|capitalize }}"
                         data-description="{{ post.hat|capitalize }}"/>
 

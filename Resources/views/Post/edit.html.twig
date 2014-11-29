@@ -13,23 +13,17 @@
 
     <p>
         {% if entity.picture %}
-            <img
-                    src="{{ entity.picture.getwebpath|imagine_filter('post_pict_show') }}"
-                    alt="image_post_{{ entity.id }}"/>
+            <img src="{{ entity.picture.getwebpath|imagine_filter('post_pict_show') }}"
+                 alt="image_post_{{ entity.id }}"/>
         {% else %}
-            <img
-                    src="{{ 'uploads/post_images/no-image.jpg'|imagine_filter('post_pict_show') }}"
-                    alt="no image"/>
+            <img src="{{ 'uploads/post_images/no-image.jpg'|imagine_filter('post_pict_show') }}"
+                 alt="no image"/>
         {% endif %}
     </p>
-    {{ form(edit_form) }}
 
-    <hr/>
-    <p>
-        <a href="{{ path('admin_blog_post') }}" class="btn btn-default">
-            Retour a la liste
-        </a>
-    </p>
+    <div class="form_perso">
+        {{ form(edit_form) }}
+    </div>
 
     {{ form(delete_form) }}
 
@@ -40,6 +34,8 @@
     '@RudakBlogBundle/Resources/public/css/redactor.css' %}
     <link rel="stylesheet" href="{{ asset_url }}">
     {% endstylesheets %}
+    <link rel="stylesheet" href="{{ asset('vendors/bootstrap-select/dist/css/bootstrap-select.min.css') }}"/>
+
 {% endblock %}
 
 {% block javascripts %}
@@ -48,6 +44,10 @@
     <script src="{{ asset_url }}"></script>
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+
+    <script type="text/javascript"
+            src="{{ asset('vendors/bootstrap.file-input.js') }}"></script>
+
     <script type="text/javascript">
         $(function () {
             // http://imperavi.com/redactor/examples/
@@ -57,6 +57,10 @@
                 imageUploadErrorCallback: function (json) {
                     alert(json.error);
                 }
+            });
+
+            $('input[type=file]').bootstrapFileInput({
+                title: 'Parcourir...'
             });
         });
     </script>

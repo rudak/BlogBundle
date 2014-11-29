@@ -11,36 +11,36 @@
         <li class="active">Créer un article</li>
     </ol>
 
-    {{ form_start(form) }}
-    {{ form_errors(form) }}
+    <div class="form_perso">
 
-    <div class="form-group">
-        {{ form_label(form.title) }}
-        {{ form_errors(form.title) }}
-        {{ form_widget(form.title) }}
-    </div>
-    <div class="form-group">
-        {{ form_label(form.hat) }}
-        {{ form_errors(form.hat) }}
-        {{ form_widget(form.hat) }}
-    </div>
-    <div class="form-group">
-        {{ form_label(form.content) }}
-        {{ form_errors(form.content) }}
-        {{ form_widget(form.content) }}
-    </div>
-    <div class="form-group">
-        {{ form_label(form.picture) }}
-        {{ form_errors(form.picture) }}
-        {{ form_widget(form.picture) }}
-    </div>
-    <div class="checkbox">
-        {{ form_label(form.public) }}
-        {{ form_errors(form.public) }}
-        {{ form_widget(form.public) }}
-    </div>
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
 
-    {{ form_end(form) }}
+        <div class="form-group">
+            {{ form_label(form.title) }}
+            {{ form_errors(form.title) }}
+            {{ form_widget(form.title) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.hat) }}
+            {{ form_errors(form.hat) }}
+            {{ form_widget(form.hat) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.content) }}
+            {{ form_errors(form.content) }}
+            {{ form_widget(form.content) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.picture) }}
+            {{ form_errors(form.picture) }}
+            {{ form_widget(form.picture) }}
+        </div>
+
+
+        {{ form_end(form) }}
+
+    </div>
 {% endblock %}
 
 {% block stylesheets %}
@@ -48,6 +48,8 @@
     '@RudakBlogBundle/Resources/public/css/redactor.css' %}
     <link rel="stylesheet" href="{{ asset_url }}">
     {% endstylesheets %}
+    <link rel="stylesheet" href="{{ asset('vendors/bootstrap-select/dist/css/bootstrap-select.min.css') }}"/>
+
 {% endblock %}
 
 {% block javascripts %}
@@ -56,6 +58,10 @@
     <script src="{{ asset_url }}"></script>
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+
+    <script type="text/javascript"
+            src="{{ asset('vendors/bootstrap.file-input.js') }}"></script>
+
     <script type="text/javascript">
         $(function () {
             // http://imperavi.com/redactor/examples/
@@ -65,6 +71,10 @@
                 imageUploadErrorCallback: function (json) {
                     alert(json.error);
                 }
+            });
+
+            $('input[type=file]').bootstrapFileInput({
+                title: 'Parcourir...'
             });
         });
     </script>

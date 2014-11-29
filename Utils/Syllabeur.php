@@ -12,7 +12,7 @@ class Syllabeur
 
     public static function getMots($nb = 2)
     {
-        $out = '';
+         $out = null;
         for ($i = 0; $i < $nb; $i++) {
             $out .= self::getSyllabes(rand(1, 3)) . ' ';
         }
