@@ -18,7 +18,7 @@ class DefaultController extends Controller
      */
     public function indexAction($page)
     {
-        $NB_PAR_PAGE    = 5;
+        $NB_PAR_PAGE    = 10;
         $NB_TOTAL_POSTS = $this->getRepo()->getNbTotalPosts();
         $posts          = $this->getRepo()->getPostsByPage($page, $NB_PAR_PAGE);
 

@@ -4,28 +4,30 @@
 
     <div class="row">
         <div class="col-sm-6 col-md-9">
-            <h1>Liste des posts</h1>
-            {% for post in posts %}
-                <div class="post">
-                    <h2>{{ post.title|capitalize }}</h2>
+            <h1 class="main_title">Actualités</h1>
 
-                    <p class=" text-justify">
-                        {{ post.hat }}
-                    </p>
+            <div id="posts">
+                {% for post in posts %}
+                    <div class="post">
+                        <a class="clearfix" href="{{ path('rudak_blog_post',{id:post.id,slug:post.slug}) }}"
+                           title="{{ post.title }}">
+                            <div class="img hidden-xs">
+                                <img src="{{ post.picture.getwebpath|default('uploads/post_images/no-image.jpg')|imagine_filter('post_front_list') }}" class="img-responsive"
+                                     alt="image_post_{{ post.id }}"/>
 
-                    <p>
-                        <small>
-                            Posté le {{ post.date|date('d/m/Y') }} par {{ post.creatorName }}
-                        </small>
-                    </p>
-                    <p>
-                        <a href="{{ path('rudak_blog_post',{id:post.id,slug:post.slug}) }}" class="btn btn-default">
-                            Lire cet article
+                            </div>
+                            <div class="info_post">
+                                <h1 class="title">{{ post.title|upper }}</h1>
+
+                                <h2 class="hat">{{ post.hat|capitalize }}</h2>
+                            </div>
+                            <div class="date">
+                                Posté le {{ post.date|date('d/m/Y \\à H:i') }}
+                            </div>
                         </a>
-                    </p>
-                </div>
-            {% endfor %}
-            <hr/>
+                    </div>
+                {% endfor %}
+            </div>
             <nav>
                 <ul class="pagination">
                     {{ pagination|raw }}

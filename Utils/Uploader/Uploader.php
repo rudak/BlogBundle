@@ -1,7 +1,7 @@
 <?php
 namespace Rudak\BlogBundle\Utils\Uploader;
 
-use Rudak\BlogBundle\Utils\Resizer;
+use Rudak\ResizerBundle\Utils\Resizer;
 
 class Uploader
 {

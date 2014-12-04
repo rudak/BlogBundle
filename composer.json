@@ -12,7 +12,8 @@
         }
     ],
     "require": {
-        "friendsofsymfony/jsrouting-bundle": "@stable"
+        "friendsofsymfony/jsrouting-bundle": "@stable",
+        "rudak/resizer-bundle": "dev-master"
     },
     "autoload": {
         "psr-0": {

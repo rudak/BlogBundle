@@ -5,7 +5,7 @@ namespace Rudak\BlogBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Rudak\BlogBundle\Utils\Resizer;
+use Rudak\ResizerBundle\Utils\Resizer;
 
 /**
  * Picture

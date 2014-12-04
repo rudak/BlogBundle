@@ -3,33 +3,52 @@
 {% block body %}
     <div class="row">
         <div class="col-sm-12 col-md-8 col-lg-9 article">
-            {% if post.picture %}
-                <img src="{{ post.picture.getwebpath|imagine_filter('post_front_show') }}" alt="image {{ post.title }}"
-                     class="img-responsive postHeaderImg"/>
-            {% endif %}
+            <h1 class="main_title">Actualités</h1>
 
-            <h1>{{ post.title|capitalize }}</h1>
+            <div id="post">
 
-            <div class="content">
-                {{ post.content|raw }}
+                <div class="clearfix">
+                    <p class="date pull-right">
+                        Article posté le {{ post.date|date('d/m/Y') }} par {{ post.creatorName }}
+                    </p>
+                </div>
+
+                <h2 id="post_title">{{ post.title|capitalize }}</h2>
+                {% if post.hat %}
+                    <p id="hat">{{ post.hat|capitalize }}</p>
+                {% endif %}
+
+                {% if post.picture %}
+                    <img src="{{ post.picture.getwebpath|imagine_filter('post_front_show') }}"
+                         alt="image d'entete article {{ post.title }}"
+                         class="img-responsive "
+                         id="postHeaderImg"/>
+                {% endif %}
+
+                <div id="content">
+                    {{ post.content|raw }}
+                </div>
+
+                <div class="clearfix">
+                    <p class="pull-right">
+                        <span class="label label-default">
+                            Article consulté {{ post.hit }} fois.
+                        </span>
+                    </p>
+                </div>
+
+                <hr/>
+                <nav>
+                    <ul class="pager">
+                        <li class="previous">
+                            <a href="{{ path('rudak_blog_prev_post',{id:post.id}) }}">&larr; Précédent</a>
+                        </li>
+                        <li class="next">
+                            <a href="{{ path('rudak_blog_next_post',{id:post.id}) }}">Suivant &rarr;</a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
-            <hr/>
-            <p>
-                Posté le {{ post.date|date('d/m/Y') }} par {{ post.creatorName }}
-                <br/>
-                {{ post.hit }} {% if post.hit > 1 %}vues{% else %}vue{% endif %}
-            </p>
-            <hr/>
-            <nav>
-                <ul class="pager">
-                    <li class="previous">
-                        <a href="{{ path('rudak_blog_prev_post',{id:post.id}) }}">&larr; Précédent</a>
-                    </li>
-                    <li class="next">
-                        <a href="{{ path('rudak_blog_next_post',{id:post.id}) }}">Suivant &rarr;</a>
-                    </li>
-                </ul>
-            </nav>
         </div>
         <div class="col-sm-12 col-md-4 col-lg-3">
             {{ render(controller('RudakBlogBundle:Default:getLastPosts')) }}
