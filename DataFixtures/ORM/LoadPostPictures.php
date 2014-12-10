@@ -6,38 +6,34 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Rudak\BlogBundle\Entity\Picture;
 
+use Rudak\PictureGrabber\Model\PictureGrabber;
+
 class LoadPostPictures extends AbstractFixture implements OrderedFixtureInterface
 {
     const REFERENCE_NAME = 'RudakBlogPost_picture_';
-
-    private $url;
-    private $fichier;
-    private $largeur;
-    private $hauteur;
-    private $dir;
-
-    public function __construct()
-    {
-        $this->dir     = '../../../../../../../../web/uploads/post_images/';
-        $this->largeur = 800;
-        $this->hauteur = 600;
-        $this->url     = 'http://lorempixel.com/' . $this->largeur . '/' . $this->hauteur . '/';
-    }
+    const PREFIX = 'rcm_actu_';
 
     public function load(ObjectManager $manager)
     {
         $nombre_pictures = LoadPostData::getNombre();
         $pictures        = array();
+        $url = "http://lorempixel.com/%s/%s/";
 
         echo "IMAGES D'ARTICLES\n";
         echo "Nombre total : {$nombre_pictures} \n";
 
         for ($i = 0; $i <= $nombre_pictures; $i++) {
-            $this->choppe_image();
 
+            $url = sprintf($url, rand(760, 840), rand(550, 610));
             $pictures[$i] = new Picture();
-            $pictures[$i]->setPath($this->fichier);
+
+            $pc    = new PictureGrabber($url, $pictures[$i]->getUploadDir(), self::PREFIX);
+            $image = $pc->getImage() ? $pc->getFileName() : $pictures[$i]->getDefaultImagePath();
+
+            $pictures[$i]->setPath($image);
             $this->setReference($this->getReferenceName($i), $pictures[$i]);
+
+            echo ' - [' . $i . '/' . $nombre_pictures . '] ' . $image . "\n";
             $manager->persist($pictures[$i]);
         }
         echo "\n";
@@ -49,48 +45,11 @@ class LoadPostPictures extends AbstractFixture implements OrderedFixtureInterfac
         return self::REFERENCE_NAME . $id;
     }
 
-    function choppe_image()
-    {
-        $this->setFichierName();
-        $path = $this->getAbsoluteFichierPath();
-        $this->createFichier($path);
-
-        echo $this->fichier . ' ';
-
-        $ch = curl_init($this->url);
-        $fp = fopen($this->getAbsoluteFichierPath(), 'wb');
-
-        curl_setopt($ch, CURLOPT_FILE, $fp);
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-        curl_exec($ch);
-        curl_close($ch);
-        fclose($fp);
-    }
-
-    private function createFichier($path)
-    {
-        return fopen($path, 'w+');
-    }
-
-    private function getAbsoluteFichierPath($real = false)
-    {
-        if ($real) {
-            return realpath(__DIR__ . $this->dir . $this->fichier);
-        } else {
-            return __DIR__ . $this->dir . $this->fichier;
-        }
-    }
-
-    private function setFichierName()
-    {
-        $this->fichier = 'a_' . substr(str_shuffle('azertyuiopqsdfghjklmwxcvbn0123456789'), 0, 5) . '.jpg';
-    }
-
     /**
      * {@inheritDoc}
      */
     public function getOrder()
     {
-        return 11;
+        return 711;
     }
 } 

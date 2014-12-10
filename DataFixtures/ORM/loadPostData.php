@@ -14,12 +14,15 @@ use Rudak\BlogBundle\Utils\Namer;
 class loadPostData extends AbstractFixture implements OrderedFixtureInterface
 {
 
-    const NOMBRE_ARTICLES = 27;
+    const NOMBRE_ARTICLES = 188;
 
     public function load(ObjectManager $manager)
     {
         $BaconIpsum = new BaconIpsum();
         $posts      = array();
+
+        echo "CREATION DES ARTICLES : \n";
+
         for ($i = 0; $i <= self::NOMBRE_ARTICLES; $i++) {
             $posts[$i] = new Post();
             $posts[$i]->setTitle(Syllabeur::getMots(rand(2, 5)));
@@ -32,7 +35,7 @@ class loadPostData extends AbstractFixture implements OrderedFixtureInterface
             $posts[$i]->setCreatorName(Namer::getFirstName() . ' ' . Namer::getLastName());
             $posts[$i]->setPicture($this->getReference($this->getPictureReference($i)));
             $manager->persist($posts[$i]);
-            echo '.';
+            echo ' - [' . $i . '/' . self::NOMBRE_ARTICLES . '] ' . $posts[$i]->getTitle() . "\n";
         }
         echo "\n";
         $manager->flush();
@@ -53,6 +56,6 @@ class loadPostData extends AbstractFixture implements OrderedFixtureInterface
      */
     public function getOrder()
     {
-        return 14;
+        return 714;
     }
 } 

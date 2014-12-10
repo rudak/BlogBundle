@@ -18,6 +18,8 @@ class Picture
 {
 
     private $defaultImagePath = 'no-image.jpg';
+    private $dir = 'uploads/post_images';
+
 
     /**
      * @var integer
@@ -125,7 +127,7 @@ class Picture
     public function removeUpload()
     {
         if (isset($this->temp)) {
-            if ($this->temp != $this->getDefaultImagePath()) {
+            if ($this->temp != $this->getFullDefaultImagePath()) {
                 unlink($this->temp);
             }
         }
@@ -157,9 +159,14 @@ class Picture
             : $this->getUploadRootDir() . '/' . $this->path;
     }
 
+    private function getFullDefaultImagePath()
+    {
+        return $this->getUploadDir() . '/' . $this->getDefaultImagePath();
+    }
+
     private function getDefaultImagePath()
     {
-        return $this->getUploadDir() . '/' . $this->defaultImagePath;
+        return $this->defaultImagePath;
     }
 
     public function getWebPath()
@@ -176,11 +183,11 @@ class Picture
         return __DIR__ . '/../../../../../../web/' . $this->getUploadDir();
     }
 
-    protected function getUploadDir()
+    public function getUploadDir()
     {
         // get rid of the __DIR__ so it doesn't screw up
         // when displaying uploaded doc/image in the view.
-        return 'uploads/post_images';
+        return $this->dir;
     }
 
     /**
