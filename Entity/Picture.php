@@ -164,7 +164,7 @@ class Picture
         return $this->getUploadDir() . '/' . $this->getDefaultImagePath();
     }
 
-    private function getDefaultImagePath()
+    public function getDefaultImagePath()
     {
         return $this->defaultImagePath;
     }
