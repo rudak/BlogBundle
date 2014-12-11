@@ -6,9 +6,10 @@ use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
 use Rudak\BlogBundle\Entity\Post;
-use Rudak\BlogBundle\Utils\BaconIpsum;
-use Rudak\BlogBundle\Utils\Syllabeur;
-use Rudak\BlogBundle\Utils\Namer;
+
+use Rudak\UtilsBundle\BaconIpsum;
+use Rudak\UtilsBundle\Syllabeur;
+use Rudak\UtilsBundle\Namer;
 
 
 class loadPostData extends AbstractFixture implements OrderedFixtureInterface

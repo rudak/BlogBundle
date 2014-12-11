@@ -3,7 +3,7 @@
 namespace Rudak\BlogBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Rudak\BlogBundle\Utils\Slug;
+use Rudak\Slug\Utils\Slug;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -109,8 +109,7 @@ class Post
      */
     public function slugTheTitle()
     {
-        $Slug = new Slug($this->getTitle());
-        $this->setSlug($Slug->getSlug());
+        $this->setSlug(Slug::slugit($this->getTitle()));
     }
 
     /**
