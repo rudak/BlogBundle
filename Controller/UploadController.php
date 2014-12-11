@@ -5,7 +5,7 @@ namespace Rudak\BlogBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Rudak\BlogBundle\Utils\Uploader\Uploader;
+use Rudak\UtilsBundle\Uploader\Uploader;
 
 class UploadController extends Controller
 {
