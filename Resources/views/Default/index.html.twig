@@ -3,7 +3,7 @@
 {% block layout %}
 
     <div class="row">
-        <div class="col-sm-6 col-md-9">
+        <div class="col-sm-12 col-md-9">
             <h1 class="main_title">Actualités</h1>
 
             <div id="posts">
@@ -11,7 +11,7 @@
                     <div class="post">
                         <a class="clearfix" href="{{ path('rudak_blog_post',{id:post.id,slug:post.slug}) }}"
                            title="{{ post.title }}">
-                            <div class="img hidden-xs">
+                            <div class="img">
                                 <img src="{{ post.picture.getwebpath|default('uploads/post_images/no-image.jpg')|imagine_filter('post_front_list') }}" class="img-responsive"
                                      alt="image_post_{{ post.id }}"/>
 
@@ -19,7 +19,7 @@
                             <div class="info_post">
                                 <h1 class="title">{{ post.title|upper }}</h1>
 
-                                <h2 class="hat">{{ post.hat|capitalize }}</h2>
+                                <h2 class="hat hidden-xs">{{ post.hat|capitalize }}</h2>
                             </div>
                             <div class="date">
                                 Posté le {{ post.date|date('d/m/Y \\à H:i') }}
@@ -34,7 +34,7 @@
                 </ul>
             </nav>
         </div>
-        <div class="col-sm-6 col-md-3">
+        <div class="col-sm-12 col-md-3">
             {{ render(controller('RudakBlogBundle:Default:getLastPosts')) }}
             {{ render(controller('RudakBlogBundle:Default:getPopularPosts')) }}
         </div>

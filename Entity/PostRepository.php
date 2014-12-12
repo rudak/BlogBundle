@@ -41,7 +41,7 @@ class PostRepository extends EntityRepository
     {
         $qb = $this->createQueryBuilder('p')
             ->addSelect('pic')
-            ->leftJoin('p.picture','pic')
+            ->leftJoin('p.picture', 'pic')
             ->where('p.public = true')
             ->addOrderBy('p.id', 'DESC')
             ->setMaxResults($nb)
@@ -120,5 +120,18 @@ class PostRepository extends EntityRepository
                 ->getQuery();
             return $qb->getOneOrNullResult();
         }
+    }
+
+
+    // admin side
+
+    public function getAdminIndexList()
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->addSelect('pic')
+            ->leftJoin('p.picture', 'pic')
+            ->orderBy('p.id', 'DESC')
+            ->getQuery();
+        return $qb->execute();
     }
 }
