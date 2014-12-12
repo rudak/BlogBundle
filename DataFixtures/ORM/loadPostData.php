@@ -8,6 +8,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Rudak\BlogBundle\Entity\Post;
 
 use Rudak\UtilsBundle\BaconIpsum;
+use Rudak\UtilsBundle\FakeContentGenerator;
 use Rudak\UtilsBundle\Syllabeur;
 use Rudak\UtilsBundle\Namer;
 
@@ -15,20 +16,21 @@ use Rudak\UtilsBundle\Namer;
 class loadPostData extends AbstractFixture implements OrderedFixtureInterface
 {
 
-    const NOMBRE_ARTICLES = 188;
+    const NOMBRE_ARTICLES = 38;
 
     public function load(ObjectManager $manager)
     {
         $BaconIpsum = new BaconIpsum();
+        $fcg        = new FakeContentGenerator();
         $posts      = array();
 
         echo "CREATION DES ARTICLES : \n";
 
         for ($i = 0; $i <= self::NOMBRE_ARTICLES; $i++) {
             $posts[$i] = new Post();
-            $posts[$i]->setTitle(Syllabeur::getMots(rand(2, 5)));
-            $posts[$i]->setHat(Syllabeur::getMots(rand(5, 25)));
-            $posts[$i]->setContent($BaconIpsum->get_content());
+            $posts[$i]->setTitle($fcg->getRandSentence(false, rand(5, 10)));
+            $posts[$i]->setHat($fcg->getRandSentence(false, rand(10, 25)));
+            $posts[$i]->setContent($fcg->getRandSentence());
             $posts[$i]->setDate(new \DateTime('-' . (rand(10, 40000)) . 'hour'));
             $posts[$i]->setHit(rand(0, 480));
             $posts[$i]->setPublic(rand(0, 1));

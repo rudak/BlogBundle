@@ -4,11 +4,11 @@
             <a href="{{ path('rudak_blog_post',{id:post.id,slug:post.title|slugit}) }}" target="_self">
                 <img
                         src="{{ post.picture.getwebpath|default('uploads/post_images/no-image.jpg')|imagine_filter('post_front_show') }}"
-                        alt="{{ post.title|capitalize }}"
+                        alt="{{ post.title }}"
                         data-description="{{ post.hat|capitalize }}"/>
 
                 <span>
-                    {{ post.title|capitalize }}
+                    {{ post.title|upper }}
                 </span>
             </a>
         </li>

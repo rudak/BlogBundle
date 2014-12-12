@@ -1,10 +1,13 @@
-<h2>Derniers articles</h2>
-<ul class="lastposts">
-    {% for post in posts %}
-        <li>
-            <a href="{{ path('rudak_blog_post',{id:post.id,slug:post.slug}) }}" title="{{ post.title }} - vu {{ post.hit }} fois">
-                {{ post.title }}
-            </a>
-        </li>
-    {% endfor %}
-</ul>
+<div class="pub">
+    <h2 class="title">Derniers articles</h2>
+    <ul class="lastposts">
+        {% for post in posts %}
+            <li>
+                <a href="{{ path('rudak_blog_post',{id:post.id,slug:post.slug}) }}"
+                   title="{{ post.title }} - vu {{ post.hit }} fois">
+                    {{ post.title }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
