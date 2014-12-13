@@ -47,6 +47,11 @@ class PostController extends Controller
             $em->persist($entity);
             $em->flush();
 
+            $request->getSession()->getFlashBag()->add(
+                'success',
+                'Article créé avec succès'
+            );
+
             return $this->redirect($this->generateUrl('admin_blog_post_show', array('id' => $entity->getId())));
         }
 
@@ -198,6 +203,11 @@ class PostController extends Controller
         }
 
         if ($editForm->isValid()) {
+            $request->getSession()->getFlashBag()->add(
+                'success',
+                'Article modifié avec succès !'
+            );
+
             $em->flush();
 
             return $this->redirect($this->generateUrl('admin_blog_post_edit', array('id' => $id)));

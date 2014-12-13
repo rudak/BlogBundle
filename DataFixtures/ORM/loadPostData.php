@@ -7,30 +7,35 @@ use Doctrine\Common\Persistence\ObjectManager;
 
 use Rudak\BlogBundle\Entity\Post;
 
-use Rudak\UtilsBundle\BaconIpsum;
 use Rudak\UtilsBundle\FakeContentGenerator;
-use Rudak\UtilsBundle\Syllabeur;
 use Rudak\UtilsBundle\Namer;
 
 
 class loadPostData extends AbstractFixture implements OrderedFixtureInterface
 {
 
-    const NOMBRE_ARTICLES = 38;
+    const NOMBRE_ARTICLES = 18;
 
     public function load(ObjectManager $manager)
     {
-        $BaconIpsum = new BaconIpsum();
-        $fcg        = new FakeContentGenerator();
-        $posts      = array();
+        $fcg   = new FakeContentGenerator();
+        $posts = array();
 
         echo "CREATION DES ARTICLES : \n";
 
         for ($i = 0; $i <= self::NOMBRE_ARTICLES; $i++) {
             $posts[$i] = new Post();
-            $posts[$i]->setTitle($fcg->getRandSentence(false, rand(5, 10)));
-            $posts[$i]->setHat($fcg->getRandSentence(false, rand(10, 25)));
-            $posts[$i]->setContent($fcg->getRandSentence());
+            $posts[$i]->setTitle($fcg
+                ->setTags(false)->setSentenceLength(rand(3, 6))
+                ->setFinalPoint(null)
+                ->setSentenceNumber(1)->getRandSentence());
+            $posts[$i]->setHat($fcg
+                ->setTags(false)->setSentenceLength(rand(6, 20))
+                ->setSentenceNumber(1)->getRandSentence());
+            $posts[$i]->setContent($fcg
+                ->setTags(true)->setSentenceLength(rand(60, 140))
+                ->setSentenceNumber(rand(5, 8))->setFinalPoint()
+                ->getRandSentence());
             $posts[$i]->setDate(new \DateTime('-' . (rand(10, 40000)) . 'hour'));
             $posts[$i]->setHit(rand(0, 480));
             $posts[$i]->setPublic(rand(0, 1));
