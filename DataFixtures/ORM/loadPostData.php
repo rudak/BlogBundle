@@ -18,24 +18,15 @@ class loadPostData extends AbstractFixture implements OrderedFixtureInterface
 
     public function load(ObjectManager $manager)
     {
-        $fcg   = new FakeContentGenerator();
         $posts = array();
 
         echo "CREATION DES ARTICLES : \n";
 
         for ($i = 0; $i <= self::NOMBRE_ARTICLES; $i++) {
             $posts[$i] = new Post();
-            $posts[$i]->setTitle($fcg
-                ->setTags(false)->setSentenceLength(rand(3, 6))
-                ->setFinalPoint(null)
-                ->setSentenceNumber(1)->getRandSentence());
-            $posts[$i]->setHat($fcg
-                ->setTags(false)->setSentenceLength(rand(6, 20))
-                ->setSentenceNumber(1)->getRandSentence());
-            $posts[$i]->setContent($fcg
-                ->setTags(true)->setSentenceLength(rand(60, 140))
-                ->setSentenceNumber(rand(5, 8))->setFinalPoint()
-                ->getRandSentence());
+            $posts[$i]->setTitle(FakeContentGenerator::getSmallTitle());
+            $posts[$i]->setHat(FakeContentGenerator::getTitle());
+            $posts[$i]->setContent(FakeContentGenerator::getParagraph(5));
             $posts[$i]->setDate(new \DateTime('-' . (rand(10, 40000)) . 'hour'));
             $posts[$i]->setHit(rand(0, 480));
             $posts[$i]->setPublic(rand(0, 1));
