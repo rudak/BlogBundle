@@ -130,7 +130,7 @@ class Post
      */
     public function setTitle($title)
     {
-        $this->title = $title;
+        $this->title = ucfirst($title);
 
         return $this;
     }
