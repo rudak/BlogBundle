@@ -56,6 +56,18 @@
                 imageUpload: Routing.generate('admin_upload_picture'),
                 imageUploadErrorCallback: function (json) {
                     alert(json.error);
+                },
+                imageUploadCallback: function (image, json) {
+                    $(image).attr('id', json.id);
+                },
+                imageDeleteCallback: function (url, image) {
+                    var id = $(image).attr('id');
+
+                    $.ajax({
+                        url: Routing.generate('admin_delete_picture'),
+                        type: "post",
+                        data: "webpath=" + url + "&token=" + "{{ own_token }}"
+                    });
                 }
             });
 

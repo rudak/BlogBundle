@@ -16,6 +16,8 @@ use Symfony\Component\HttpFoundation\Response;
 class PostController extends Controller
 {
 
+    const OWN_TOKEN_NAME = 'own_token';
+
     /**
      * Lists all Post entities.
      *
@@ -127,7 +129,7 @@ class PostController extends Controller
      * Displays a form to edit an existing Post entity.
      *
      */
-    public function editAction($id)
+    public function editAction($id, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -137,6 +139,10 @@ class PostController extends Controller
             throw $this->createNotFoundException('Unable to find Post entity.');
         }
 
+        // token pouur le system de gestion d'images de post
+        $own_token = substr(str_shuffle('azertyuiopqsdfghjklmwxcvbn123456789'), 0, 12);
+        $request->getSession()->set(self::OWN_TOKEN_NAME, $own_token);
+
         $editForm   = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
 
@@ -144,6 +150,7 @@ class PostController extends Controller
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
+            'own_token'   => $own_token
         ));
     }
 
@@ -185,6 +192,11 @@ class PostController extends Controller
             throw $this->createNotFoundException('Unable to find Post entity.');
         }
 
+        $own_token     = $request->getSession()->get(self::OWN_TOKEN_NAME);
+        $uploadHandler = new UploadController();
+        if ($uploadHandler->checkIfTokenExist($own_token, $request)) {
+            $uploadHandler->removeImagesFromThisToken($request);
+        }
 
         $deleteForm = $this->createDeleteForm($id);
         $editForm   = $this->createEditForm($entity);
@@ -203,6 +215,8 @@ class PostController extends Controller
         }
 
         if ($editForm->isValid()) {
+            // vire les images supprimées des articles du disque dur
+
             $request->getSession()->getFlashBag()->add(
                 'success',
                 'Article modifié avec succès !'

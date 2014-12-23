@@ -35,3 +35,10 @@ admin_upload_picture:
     requirements: { _method: post }
     options:
         expose: true
+
+admin_delete_picture:
+    path:     /admin/delete-post-picture
+    defaults: { _controller: "RudakBlogBundle:Upload:addPictureToDelete" }
+    requirements: { _method: post }
+    options:
+        expose: true
