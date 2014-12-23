@@ -48,3 +48,32 @@
         </nav>
     </div>
 {% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('vendors/fancyBox/source/jquery.fancybox.css') }}"/>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript" src="{{ asset('vendors/fancyBox/source/jquery.fancybox.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendors/fancyBox/lib/jquery.mousewheel.pack.js') }}"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('div#content img').each(function (i) {
+                var image_src = $(this).attr('src');
+                var link = $('<a>').attr({
+                            'href': image_src,
+                            'class': 'fancybox',
+                            'id': 'fancybox_img_'+i,
+                            'title':'',
+                            'rel':'article'
+                        }
+                );
+
+                $(this).before(link).detach().appendTo(link);
+            });
+            $('.fancybox').fancybox();
+        })
+        ;
+    </script>
+{% endblock %}
