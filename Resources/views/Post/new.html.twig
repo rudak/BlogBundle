@@ -70,6 +70,15 @@
                 imageUpload: Routing.generate('admin_upload_picture'),
                 imageUploadErrorCallback: function (json) {
                     alert(json.error);
+                },
+                imageDeleteCallback: function (url, image) {
+                    var id = $(image).attr('id');
+
+                    $.ajax({
+                        url: Routing.generate('admin_delete_picture'),
+                        type: "post",
+                        data: "webpath=" + url + "&own_token=" + "{{ own_token }}"
+                    });
                 }
             });
 

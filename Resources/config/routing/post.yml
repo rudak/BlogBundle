@@ -38,7 +38,7 @@ admin_upload_picture:
 
 admin_delete_picture:
     path:     /admin/delete-post-picture
-    defaults: { _controller: "RudakBlogBundle:Upload:addPictureToDelete" }
+    defaults: { _controller: "RudakBlogBundle:Upload:addDeletedImage" }
     requirements: { _method: post }
     options:
         expose: true

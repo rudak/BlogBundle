@@ -49,6 +49,8 @@ class PostController extends Controller
             $em->persist($entity);
             $em->flush();
 
+            $this->checkNonUsedImages($request);
+
             $request->getSession()->getFlashBag()->add(
                 'success',
                 'Article créé avec succès'
@@ -91,15 +93,16 @@ class PostController extends Controller
      * Displays a form to create a new Post entity.
      *
      */
-    public function newAction()
+    public function newAction(Request $request)
     {
         $entity = new Post();
 
         $form = $this->createCreateForm($entity);
 
         return $this->render('RudakBlogBundle:Post:new.html.twig', array(
-            'entity' => $entity,
-            'form'   => $form->createView(),
+            'entity'    => $entity,
+            'form'      => $form->createView(),
+            'own_token' => $this->createOwnToken($request),
         ));
     }
 
@@ -139,9 +142,6 @@ class PostController extends Controller
             throw $this->createNotFoundException('Unable to find Post entity.');
         }
 
-        // token pouur le system de gestion d'images de post
-        $own_token = substr(str_shuffle('azertyuiopqsdfghjklmwxcvbn123456789'), 0, 12);
-        $request->getSession()->set(self::OWN_TOKEN_NAME, $own_token);
 
         $editForm   = $this->createEditForm($entity);
         $deleteForm = $this->createDeleteForm($id);
@@ -150,7 +150,7 @@ class PostController extends Controller
             'entity'      => $entity,
             'edit_form'   => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
-            'own_token'   => $own_token
+            'own_token'   => $this->createOwnToken($request),
         ));
     }
 
@@ -192,11 +192,7 @@ class PostController extends Controller
             throw $this->createNotFoundException('Unable to find Post entity.');
         }
 
-        $own_token     = $request->getSession()->get(self::OWN_TOKEN_NAME);
-        $uploadHandler = new UploadController();
-        if ($uploadHandler->checkIfTokenExist($own_token, $request)) {
-            $uploadHandler->removeImagesFromThisToken($request);
-        }
+        $this->checkNonUsedImages($request);
 
         $deleteForm = $this->createDeleteForm($id);
         $editForm   = $this->createEditForm($entity);
@@ -279,6 +275,20 @@ class PostController extends Controller
                 )
             ))
             ->getForm();
+    }
+
+    private function createOwnToken($request)
+    {
+        // token pouur le system de gestion d'images de post
+        $own_token = substr(str_shuffle('azertyuiopqsdfghjklmwxcvbn123456789'), 0, 12);
+        $request->getSession()->set(self::OWN_TOKEN_NAME, $own_token);
+        return $own_token;
+    }
+
+    private function checkNonUsedImages(Request $request)
+    {
+        $own_token = $request->getSession()->get(self::OWN_TOKEN_NAME);
+        UploadController::checkNonUsedImages($own_token, $request);
     }
 
 }

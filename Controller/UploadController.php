@@ -9,12 +9,10 @@ use Rudak\UtilsBundle\Uploader\Uploader;
 
 class UploadController extends Controller
 {
-    const TO_DELETE_LIST = 'post_inserts_to_delete';
+    const NON_USED_IMAGES = 'non_used_images';
     const POST_INSERTS_DIRECTORY = 'uploads/post_inserts';
-    private $session;
-    private $token;
-    private $filename;
-    private $list;
+
+    private static $session;
 
     public function uploadPictureAction()
     {
@@ -61,105 +59,51 @@ class UploadController extends Controller
         return new Response(stripslashes(json_encode($response)));
     }
 
-    public function addPictureToDeleteAction(Request $request)
-    {
-        $this->session  = $request->getSession();
-        $this->token    = $request->get('token');
-        $webpath        = $request->get('webpath');
-        $this->filename = $this->getFileNameFromWebPath($webpath);
-        $this->list     = $this->getPictureList();
-
-        $this->addFilenameToList();
-
-        $t = array(
-            'token'    => $this->token,
-            'filename' => $this->filename,
-            'list'     => $this->list
-        );
-
-        return new Response(stripslashes(json_encode($t)));
-    }
-
-    public function checkIfTokenExist($token, Request $request)
-    {
-        $this->token = $token;
-        $this->list  = $request->getSession()->get(self::TO_DELETE_LIST);
-        if (!$this->list) {
-            return false;
-        }
-        return array_key_exists($token, $this->list);
-    }
-
-    public function removeImagesFromThisToken(Request $request)
-    {
-        $list   = $this->getListToken();
-        $error  = array();
-        $result = array();
-        foreach ($list as $key => $image) {
-            $path = realpath(self::POST_INSERTS_DIRECTORY . '/' . $image);
-            if ($path) {
-                if (!unlink($path)) {
-                    $error[] = $image . ' Probleme de suppression';
-                } else {
-                    unset($list[$key]);
-                    $result[] = $image . ' Supprimee';
-                }
-            } else {
-                $error[] = $image . ' n\'existe pas';
-            }
-        }
-
-        if (!count($error)) {
-            $request->getSession()->set(self::TO_DELETE_LIST, null);
-        } else {
-            $request->getSession()->set(self::TO_DELETE_LIST, array(
-                $this->token => $list
-            ));
-        }
-        return array(
-            'error'        => $error,
-            'result'       => $result,
-            'liste finale' => $list
-        );
-    }
-
-
-    private function getListToken()
-    {
-        return $this->list[$this->token];
-    }
-
-    private function addFilenameToList()
-    {
-        $this->list[$this->token][] = $this->filename;
-        $this->updateList();
-    }
-
-    private function updateList()
-    {
-        $this->session->set(self::TO_DELETE_LIST, $this->list);
-    }
-
-    private function getPictureList()
-    {
-        $list = $this->session->get(self::TO_DELETE_LIST);
-        if ($list === null) {
-            $list = array(
-                $this->token => array()
-            );
-            $this->session->set(self::TO_DELETE_LIST, $list);
-        }
-        return $list;
-    }
-
-    private function getFileNameFromWebPath($webpath)
-    {
-        return basename($webpath);
-    }
-
     private function get_asset_url($path)
     {
         return $this->container->get('templating.helper.assets')->getUrl($path, null);
     }
 
+    public function addDeletedImageAction(Request $request)
+    {
+        $token    = $request->get('own_token');
+        $webPath  = $request->get('webpath');
+        $filename = basename($webPath);
+        $session  = $request->getSession();
+
+        if (NULL === $list = $session->get(self::NON_USED_IMAGES)) {
+            $list = array(
+                $token => array(),
+            );
+        }
+        $list[$token][] = $filename;
+        $session->set(self::NON_USED_IMAGES, $list);
+
+        return new Response(stripslashes(json_encode($session->get(self::NON_USED_IMAGES))));
+    }
+
+    public static function checkNonUsedImages($token, Request $request)
+    {
+        self::$session = $request->getSession();
+        $list          = self::getFullList();
+        if (!$list || !isset($list[$token])) {
+            return;
+        }
+
+        foreach ($list[$token] as $key => $non_used_image) {
+            if ($realpath = realpath(self::POST_INSERTS_DIRECTORY . '/' . $non_used_image)) {
+                unlink($realpath);
+                unset($list[$token][$key]);
+            }
+        }
+        if (count($list[$token]) == 0) {
+            self::$session->set(self::NON_USED_IMAGES, null);
+        }
+        return;
+    }
+
+    private static function getFullList()
+    {
+        return self::$session->get(self::NON_USED_IMAGES);
+    }
 } 
