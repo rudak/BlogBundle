@@ -17,16 +17,20 @@ class UploadController extends Controller
     public function uploadPictureAction()
     {
         $config = array(
-            Uploader::DIR               => self::POST_INSERTS_DIRECTORY,
-            Uploader::FILE_INDEX        => 'file',
-            Uploader::UPLOAD_MAX_SIZE   => '6Mo',
-            Uploader::UPLOAD_MIN_SIZE   => '50ko',
-            Uploader::UPLOAD_MIN_WIDTH  => 350,
-            Uploader::UPLOAD_MIN_HEIGHT => 400,
-            Uploader::RESIZE_NEW_WIDTH  => 800,
-            Uploader::RESIZE_NEW_HEIGHT => 800,
-            Uploader::RESIZE_QUALITY    => 75,
-            Uploader::NEWNAME_PREFIX    => 'rcf_' // Redactor Content File
+            Uploader::DIR                     => self::POST_INSERTS_DIRECTORY,
+            Uploader::FILE_INDEX              => 'file',
+            Uploader::UPLOAD_MAX_SIZE         => '6Mo',
+            Uploader::UPLOAD_MIN_SIZE         => '30ko',
+            Uploader::UPLOAD_MIN_WIDTH        => 250,
+            Uploader::UPLOAD_MIN_HEIGHT       => 250,
+            Uploader::RESIZE_NEW_WIDTH        => 800,
+            Uploader::RESIZE_NEW_HEIGHT       => 800,
+            Uploader::RESIZE_QUALITY          => 80,
+            Uploader::RESIZE_THUMB_NEW_WIDTH  => 250,
+            Uploader::RESIZE_THUMB_NEW_HEIGHT => 250,
+            Uploader::RESIZE_THUMB_QUALITY    => 30,
+            Uploader::THUMB_PREFIX            => 'thumb_',
+            Uploader::NEWNAME_PREFIX          => 'rcf_'
         );
 
         $response = array();
@@ -38,11 +42,13 @@ class UploadController extends Controller
                     if ($Uploader->isSizeOk()) {
                         if ($Uploader->isWidthOk()) {
                             if ($Uploader->isDirExists()) {
-                                if ($Uploader->moveTheFile()) {
-                                    $response['filelink'] = $this->get_asset_url($Uploader->getWebPath(), null);
-                                    $response['id']       = 'img_' . rand(120, 999999);
+                                if ($Uploader->setNewName()->moveTheFile()) {
                                     if ($Uploader->checkResizeValues()) {
                                         $Uploader->resizeIt();
+                                        $Uploader->resizeIt(true);
+                                        $response['filelink'] = $this->get_asset_url($Uploader->getWebPath(), null);
+                                        $response['id']       = 'img_' . rand(120, 999999);
+                                        $response['thumb']    = $this->get_asset_url($Uploader->getWebPath(true), null);
                                     }
                                 }
                             }

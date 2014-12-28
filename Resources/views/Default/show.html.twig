@@ -59,19 +59,6 @@
 
     <script type="text/javascript">
         $(function () {
-            $('div#content img').each(function (i) {
-                var image_src = $(this).attr('src');
-                var link = $('<a>').attr({
-                            'href': image_src,
-                            'class': 'fancybox',
-                            'id': 'fancybox_img_'+i,
-                            'title':'',
-                            'rel':'article'
-                        }
-                );
-
-                $(this).before(link).detach().appendTo(link);
-            });
             $('.fancybox').fancybox();
         })
         ;

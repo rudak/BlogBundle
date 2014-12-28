@@ -45,35 +45,19 @@
     <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
     <script src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
 
-    <script type="text/javascript"
-            src="{{ asset('vendors/bootstrap.file-input.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('vendors/bootstrap.file-input.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('public/js/own-redactor.js') }}"></script>
 
     <script type="text/javascript">
         $(function () {
-            // http://imperavi.com/redactor/examples/
-            $("#rudak_blogbundle_post_content").redactor({
-                buttonSource: true,
-                imageUpload: Routing.generate('admin_upload_picture'),
-                imageUploadErrorCallback: function (json) {
-                    alert(json.error);
-                },
-                imageUploadCallback: function (image, json) {
-                    $(image).attr('id', json.id);
-                },
-                imageDeleteCallback: function (url, image) {
-                    var id = $(image).attr('id');
 
-                    $.ajax({
-                        url: Routing.generate('admin_delete_picture'),
-                        type: "post",
-                        data: "webpath=" + url + "&own_token=" + "{{ own_token }}"
-                    });
-                }
-            });
+            $("#rudak_blogbundle_post_content").ownRedactor('{{ own_token }}', '{{ entity.id }}');
+
 
             $('input[type=file]').bootstrapFileInput({
                 title: 'Parcourir...'
             });
+
         });
     </script>
     {% endjavascripts %}
