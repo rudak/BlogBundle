@@ -57,12 +57,14 @@ class DefaultController extends Controller
             $this->getEm()->flush();
 
             $cookie   = new Cookie('hit_' . $post->getId(), true, new \DateTime('+2 day'));
-            $response = $this->render('RudakBlogBundle:Default:show.html.twig', array(
+            $content  = $this->renderView('RudakBlogBundle:Default:show.html.twig', array(
                 'post' => $post
             ));
+            $response = new Response();
+            $response->setContent($content);
             $response->headers->setCookie($cookie);
 
-            return $response->send();
+            return $response;
         }
     }
 
