@@ -6,7 +6,9 @@
 {% block fb_type %}article{% endblock %}
 
 {% block meta_perso -%}
+    <meta property="og:site_name" content="RC MONTBRON" />
     <meta property="og:article:published_time" content="{{ post.date|date('Y-m-d') }}"/>
+    <meta property="article:tag" content="rcm"/>
 {%- endblock %}
 
 {% block fb_image -%}
