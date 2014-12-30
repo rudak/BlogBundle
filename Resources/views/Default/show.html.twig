@@ -2,14 +2,17 @@
 
 {% block title %}{{ parent() }} | Actualités{% endblock %}
 
-{% block fb_title %}RCM Actualités | {{ post.title|capitalize }} {% endblock %}
+{% block fb_title %}RCM Actualités | {{ post.title|capitalize }}{% endblock %}
 {% block fb_type %}article{% endblock %}
+
 {% block fb_image -%}
     {{ post.picture.getwebpath|default('public/img/default_fb.jpg')|imagine_filter('facebook') }}
 {%- endblock %}
+
 {% block fb_description -%}
     {{ post.hat|capitalize }}
 {%- endblock %}
+
 {% block fb_url -%}
     {{ app.request.uri }}
 {%- endblock %}
