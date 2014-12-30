@@ -4,6 +4,9 @@
 
 {% block fb_title %}RCM Actualités | {{ post.title|capitalize }} {% endblock %}
 {% block fb_type %}article{% endblock %}
+{% block meta_perso %}
+    <meta property="og:article:published_time" content="{{ post.date|date('Y-m-d\\TH:i:sP') }}"/>
+{% endblock %}
 {% block fb_image -%}
     {{ post.picture.getwebpath|default('public/img/default_fb.jpg')|imagine_filter('facebook') }}
 {%- endblock %}
@@ -43,9 +46,9 @@
 
         <div class="clearfix">
             <p class="pull-right">
-                        <span class="label label-default">
-                            Article consulté {{ post.hit }} fois.
-                        </span>
+                <span class="label label-default">
+                    Article consulté {{ post.hit }} fois.
+                </span>
             </p>
         </div>
 
