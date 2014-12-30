@@ -1,4 +1,14 @@
-{% extends blog_list %}
+{% extends blog_layout %}
+
+{% block title %}{{ parent() }} | Actualités{% endblock %}
+
+{% block fb_title %}RCM | Actualités{% endblock %}
+{% block fb_type %}{{ parent() }}{% endblock %}
+{% block fb_image %}{{ parent() }}{% endblock %}
+{% block fb_description %}
+    Retrouvez toutes les actualités du RCM !
+{% endblock %}
+{% block fb_url %}http://37.187.35.183/rc-montbron.fr/web/664/have-warmed-have-planes.html{% endblock %}
 
 {% block content %}
     <h1 class="main_title">Actualités</h1>
