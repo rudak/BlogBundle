@@ -1,9 +1,7 @@
-{% extends blog_layout %}
+{% extends blog_list %}
 
 {% block content %}
-
     <h1 class="main_title">Actualités</h1>
-
     <div id="posts">
         {% for post in posts %}
             <div class="post">
@@ -32,6 +30,4 @@
             {{ pagination|raw }}
         </ul>
     </nav>
-
-
 {% endblock %}
