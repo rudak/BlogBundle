@@ -5,9 +5,9 @@
 {% block fb_title %}RCM Actualités | {{ post.title|capitalize }}{% endblock %}
 {% block fb_type %}article{% endblock %}
 
-{% block meta_perso %}
+{% block meta_perso -%}
     <meta property="og:article:published_time" content="{{ post.date|date('Y-m-d\\TH:i:sP') }}"/>
-{% endblock %}
+{%- endblock %}
 
 {% block fb_image -%}
     {{ post.picture.getwebpath|default('public/img/default_fb.jpg')|imagine_filter('facebook') }}
