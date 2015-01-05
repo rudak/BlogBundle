@@ -410,7 +410,7 @@
 		{
 			if (typeof this[module] == 'undefined') return;
 
-			// init module
+			// initManager module
 			this[module] = this[module]();
 
 			var methods = this.getModuleMethods(this[module]);
@@ -607,7 +607,7 @@
 						this.toolbar.build();
 					}
 
-					// modal templates init
+					// modal templates initManager
 					this.modal.loadTemplates();
 
 					// plugins
@@ -616,7 +616,7 @@
 					// observers
 					setTimeout($.proxy(this.observe.load, this), 4);
 
-					// init callback
+					// initManager callback
 					this.core.setCallback('init');
 				},
 				setOptions: function()

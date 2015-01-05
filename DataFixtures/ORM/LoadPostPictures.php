@@ -38,6 +38,7 @@ class LoadPostPictures extends AbstractFixture implements OrderedFixtureInterfac
         }
         echo "\n";
         $manager->flush();
+        echo "TERMINE\n -------------------- \n";
     }
 
     public static function getReferenceName($id)

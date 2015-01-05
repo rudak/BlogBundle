@@ -14,7 +14,7 @@ use Rudak\UtilsBundle\Namer;
 class loadPostData extends AbstractFixture implements OrderedFixtureInterface
 {
 
-    const NOMBRE_ARTICLES = 18;
+    const NOMBRE_ARTICLES = 180;
 
     public function load(ObjectManager $manager)
     {
