@@ -59,10 +59,12 @@ class UploadController extends Controller
         }
 
         if ($Uploader->getDebugValue()) {
-            $response['error'] = $Uploader->getDebugValue();
+            $response['error']      = true;
+            $response['message']    = $Uploader->getDebugValue();
+
         }
 
-        return new Response(stripslashes(json_encode($response)));
+        return new Response(json_encode($response));
     }
 
     private function get_asset_url($path)
