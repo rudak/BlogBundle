@@ -59,8 +59,8 @@ class UploadController extends Controller
         }
 
         if ($Uploader->getDebugValue()) {
-            $response['error']      = true;
-            $response['message']    = $Uploader->getDebugValue();
+            $response['error']   = true;
+            $response['message'] = $Uploader->getDebugValue();
 
         }
 
