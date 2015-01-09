@@ -18,13 +18,15 @@ class PostType extends AbstractType
             ->add('title', 'text', array(
                 'label' => 'Titre de l\'article',
                 'attr'  => array(
-                    'class' => 'form-control'
+                    'class'       => 'form-control',
+                    'placeholder' => 'Titre tres court'
                 )
             ))
             ->add('hat', 'text', array(
                 'label' => 'Chapeau de l\'article',
                 'attr'  => array(
-                    'class' => 'form-control'
+                    'class' => 'form-control',
+                    'placeholder' => 'Phrase de description d\'une ligne ou deux'
                 )
             ))
             ->add('content', 'textarea', array(
