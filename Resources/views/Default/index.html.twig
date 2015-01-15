@@ -1,6 +1,6 @@
 {% extends blog_layout %}
 
-{% block title %}{{ parent() }} | Actualités{% endblock %}
+{% block title %}Actualités | {{ parent() }}{% endblock %}
 
 {% block fb_title %}RCM | Actualités{% endblock %}
 {% block fb_type %}article{% endblock %}
@@ -15,27 +15,33 @@
 {% block content %}
     <h1 class="main_title">Actualités</h1>
     <div id="posts">
-        {% for post in posts %}
-            <div class="post">
-                <a class="clearfix" href="{{ path('rudak_blog_post',{id:post.id,slug:post.slug}) }}"
-                   title="{{ post.title }}">
-                    <div class="img">
-                        <img src="{{ post.picture.getwebpath|default('uploads/post_images/no-image.jpg')|imagine_filter('post_front_list') }}"
-                             class="img-responsive"
-                             alt="image_post_{{ post.id }}"/>
+        {% if posts|length %}
+            {% for post in posts %}
+                <div class="post">
+                    <a class="clearfix" href="{{ path('rudak_blog_post',{id:post.id,slug:post.slug}) }}"
+                       title="{{ post.title }}">
+                        <div class="img">
+                            <img src="{{ post.picture.getwebpath|default('uploads/post_images/no-image.jpg')|imagine_filter('post_front_list') }}"
+                                 class="img-responsive"
+                                 alt="image_post_{{ post.id }}"/>
 
-                    </div>
-                    <div class="info_post">
-                        <h1 class="title">{{ post.title|upper }}</h1>
+                        </div>
+                        <div class="info_post">
+                            <h1 class="title">{{ post.title|upper }}</h1>
 
-                        <h2 class="hat hidden-xs">{{ post.hat|capitalize }}</h2>
-                    </div>
-                    <div class="date">
-                        Posté le {{ post.date|date('d/m/Y \\à H:i') }}
-                    </div>
-                </a>
-            </div>
-        {% endfor %}
+                            <h2 class="hat hidden-xs">{{ post.hat|capitalize }}</h2>
+                        </div>
+                        <div class="date">
+                            Posté le {{ post.date|date('d/m/Y \\à H:i') }}
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>
+                Aucune actualités pour le moment.
+            </p>
+        {% endif %}
     </div>
     <nav>
         <ul class="pagination">

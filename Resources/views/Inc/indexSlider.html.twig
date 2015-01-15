@@ -1,16 +1,22 @@
-<ul class="pgwSlider">
-    {% for post in posts %}
-        <li>
-            <a href="{{ path('rudak_blog_post',{id:post.id,slug:post.title|slugit}) }}" target="_self">
-                <img
-                        src="{{ post.picture.getwebpath|default('uploads/post_images/no-image.jpg')|imagine_filter('post_front_show') }}"
-                        alt="{{ post.title }}"
-                        data-description="{{ post.hat|capitalize }}"/>
+{% if posts|length %}
+    <ul class="pgwSlider">
+        {% for post in posts %}
+            <li>
+                <a href="{{ path('rudak_blog_post',{id:post.id,slug:post.title|slugit}) }}" target="_self">
+                    <img
+                            src="{{ post.picture.getwebpath|default('uploads/post_images/no-image.jpg')|imagine_filter('post_front_show') }}"
+                            alt="{{ post.title }}"
+                            data-description="{{ post.hat|capitalize }}"/>
 
                 <span>
                     {{ post.title|upper }}
                 </span>
-            </a>
-        </li>
-    {% endfor %}
-</ul>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>
+        En attente d'articles...
+    </p>
+{% endif %}

@@ -23,7 +23,7 @@ class DefaultController extends Controller
         $posts          = $this->getRepo()->getPostsByPage($page, $NB_PAR_PAGE);
 
         if (!$posts) {
-            throw $this->createNotFoundException('Impossible de trouver les posts');
+            //throw $this->createNotFoundException('Impossible de trouver les posts');
         }
         $this->get('MenuBundle.Handler')->setActiveItem(self::ACTIVE_ITEM);
         return $this->render('RudakBlogBundle:Default:index.html.twig', array(
