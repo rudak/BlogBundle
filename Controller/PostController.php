@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Rudak\BlogBundle\Entity\Post;
 use Rudak\BlogBundle\Form\PostType;
 use Symfony\Component\HttpFoundation\Response;
+use Rudak\TwitterOauthBundle\Model\TwitterHandler;
 
 /**
  * Post controller.
@@ -49,6 +50,16 @@ class PostController extends Controller
             $em->persist($entity);
             $em->flush();
 
+            if ($entity->getPublic()) {
+
+                $patternTwitter = "Nouvel article sur notre site ! %s";
+                $article_url    = $this->generateUrl('rudak_blog_post', array(
+                    'id'   => $entity->getId(),
+                    'slug' => $entity->getSlug()
+                ), true);
+                $this->twitterAction(sprintf($patternTwitter, $article_url));
+            }
+
             $this->checkNonUsedImages($request);
 
             $request->getSession()->getFlashBag()->add(
@@ -64,6 +75,30 @@ class PostController extends Controller
             'form'   => $form->createView(),
         ));
     }
+
+
+    public function twitterAction($txt)
+    {
+        if (false === $this->container->getParameter('consumer_key')) {
+            return false;
+        }
+
+        $consumer_key        = $this->container->getParameter('consumer_key');
+        $consumer_secret     = $this->container->getParameter('consumer_secret');
+        $access_token        = $this->container->getParameter('access_token');
+        $access_token_secret = $this->container->getParameter('access_token_secret');
+
+        $option = array(
+            'consumer_key'        => $consumer_key,
+            'consumer_secret'     => $consumer_secret,
+            'access_token'        => $access_token,
+            'access_token_secret' => $access_token_secret
+        );
+
+        $th = new TwitterHandler($option);
+        return $th->postStatus($txt);
+    }
+
 
     /**
      * Creates a form to create a Post entity.
@@ -285,6 +320,10 @@ class PostController extends Controller
         return $own_token;
     }
 
+    /**
+     * Vérifie les images qui n'ont finalement été utilisées
+     * mais qui ont été uploadées quand meme (expérimental)
+     */
     private function checkNonUsedImages(Request $request)
     {
         $own_token = $request->getSession()->get(self::OWN_TOKEN_NAME);

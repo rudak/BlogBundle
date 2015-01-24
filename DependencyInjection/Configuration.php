@@ -18,11 +18,16 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('rudak_blog');
+        $rootNode    = $treeBuilder->root('rudak_blog');
 
-        // Here you should define the parameters that are allowed to
-        // configure your bundle. See the documentation linked above for
-        // more information on that topic.
+        $rootNode
+            ->children()
+            ->booleanNode('twitter_publication')->defaultFalse()->end()
+            ->scalarNode('consumer_key')->defaultNull()->end()
+            ->scalarNode('consumer_secret')->defaultNull()->end()
+            ->scalarNode('access_token')->defaultNull()->end()
+            ->scalarNode('access_token_secret')->defaultNull()->end()
+            ->end();
 
         return $treeBuilder;
     }
