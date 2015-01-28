@@ -13,7 +13,8 @@
     ],
     "require": {
         "friendsofsymfony/jsrouting-bundle": "@stable",
-        "rudak/resizer-bundle": "dev-master"
+        "rudak/resizer-bundle": "dev-master",
+        "rudak/own-logger-bundle": "dev-master"
     },
     "autoload": {
         "psr-0": {

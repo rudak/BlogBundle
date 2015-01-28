@@ -16,13 +16,8 @@
         <tr>
             <th>Image</th>
             <td>
-                {% if entity.picture %}
-                    <img src="{{ entity.picture.getwebpath|imagine_filter('post_pict_show') }}"
-                         alt="image_post_{{ entity.id }}"/>
-                {% else %}
-                    <img src="{{ 'uploads/post_images/no-image.jpg'|imagine_filter('post_pict_show') }}"
-                         alt="no image"/>
-                {% endif %}
+                <img src="{{ entity.picture.getwebpath|default('uploads/post_images/no-image.jpg')|imagine_filter('post_pict_show') }}"
+                     alt="image_post_{{ entity.id }}" class="img-responsive img-thumbnail"/>
             </td>
         </tr>
         <tr>

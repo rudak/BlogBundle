@@ -20,32 +20,24 @@
     <table class="table">
         <thead>
         <tr>
-            <th>Image</th>
+            <th class="hidden-xs">Image</th>
             <th>Title</th>
-            <th>Date</th>
-            <th>Public</th>
-            <th>Hit</th>
+            <th class="hidden-xs">Date</th>
+            <th class="hidden-xs">Public</th>
+            <th class="hidden-xs">Hit</th>
             <th></th>
         </tr>
         </thead>
         <tbody>
         {% for entity in entities %}
             <tr>
-                <td>
-                    {% if entity.picture %}
-                        <img
-                                src="{{ entity.picture.getwebpath|imagine_filter('post_pict') }}"
-                                alt="image_post_{{ entity.id }}"/>
-                    {% else %}
-                        <img
-                                src="{{ 'uploads/post_images/no-image.jpg'|imagine_filter('post_pict') }}"
-                                alt="no image"/>
-                    {% endif %}
-
+                <td class="hidden-xs">
+                    <img src="{{ entity.picture.getwebpath|default('uploads/post_images/no-image.jpg')|imagine_filter('post_pict') }}"
+                         alt="image_post_{{ entity.id }}"/>
                 </td>
                 <td>{{ entity.title }}</td>
-                <td>{% if entity.date %}{{ entity.date|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>
+                <td class="hidden-xs">{% if entity.date %}{{ entity.date|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td class="hidden-xs">
                     {% if entity.locked %}
                         <span class="glyphicon glyphicon-lock"></span>
                     {% endif %}
@@ -55,7 +47,7 @@
                         <span class="label label-warning">Non</span>
                     {% endif %}
                 </td>
-                <td>
+                <td class="hidden-xs">
                     <span class="badge">
                     {{ entity.hit }}
                     </span>
