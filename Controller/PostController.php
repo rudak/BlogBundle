@@ -67,6 +67,8 @@ class PostController extends Controller
                 'Article créé avec succès'
             );
 
+            $this->logging($this->getUser()->getUsername(), sprintf('Création d\'un article [#%d]', $entity->getId()), 'Blog');
+
             return $this->redirect($this->generateUrl('admin_blog_post_show', array('id' => $entity->getId())));
         }
 
@@ -255,6 +257,8 @@ class PostController extends Controller
 
             $em->flush();
 
+            $this->logging($this->getUser()->getUsername(), sprintf('Modification d\'un article [#%d]', $entity->getId()), 'Blog');
+
             return $this->redirect($this->generateUrl('admin_blog_post_edit', array('id' => $id)));
         }
 
@@ -285,6 +289,9 @@ class PostController extends Controller
             if (!$entity->isLocked()) {
                 $em->remove($entity);
                 $em->flush();
+
+                $this->logging($this->getUser()->getUsername(), sprintf('Suppression d\'un article [#%d]', $entity->getId()), 'Blog');
+
             }
         }
 
@@ -328,6 +335,15 @@ class PostController extends Controller
     {
         $own_token = $request->getSession()->get(self::OWN_TOKEN_NAME);
         UploadController::checkNonUsedImages($own_token, $request);
+    }
+
+    private function logging($user, $action, $category)
+    {
+        try {
+            $OwnLogger = $this->get('rudak.own.logger');
+            $OwnLogger->addEntry($user, $action, $category, new \DateTime());
+        } catch (\Exception $e) {
+        }
     }
 
 }
