@@ -16,7 +16,7 @@
 {%- endblock %}
 
 {% block fb_description -%}
-    {{ post.hat|capitalize }}
+    {{ post.hat }}
 {%- endblock %}
 
 {% block fb_url -%}
@@ -30,13 +30,13 @@
 
         <div class="clearfix">
             <p class="date pull-right">
-                Article posté le {{ post.date|date('d/m/Y') }} par {{ post.creatorName|capitalize }}
+                Article posté le {{ post.date|date('d/m/Y') }} par {{ post.creatorName }}
             </p>
         </div>
 
-        <h2 id="post_title">{{ post.title|capitalize }}</h2>
+        <h2 id="post_title">{{ post.title }}</h2>
         {% if post.hat %}
-            <p id="hat">{{ post.hat|capitalize }}</p>
+            <p id="hat">{{ post.hat }}</p>
         {% endif %}
 
         {% if post.picture %}
